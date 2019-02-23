@@ -1,11 +1,10 @@
 # -*- coding:utf-8 -*-
 #
 # DataWay ORM Models
-# Initial Date: 2018.06.17
 #
 # Title: the define of sqlalchemy
 #
-# Version 0.1
+
 from datetime import datetime
 from sqlalchemy import Column, String, create_engine, Integer, DateTime, Boolean, ForeignKey, Table, Interval
 from sqlalchemy.orm import sessionmaker, relationship
@@ -18,7 +17,6 @@ Base = declarative_base()
 
 class Datasource(Base):
     __tablename__ = 'datasource'
-    # __mapper_args__ = {'column_prefix': 'plt_cus_'}
 
     id = Column(String, primary_key=True)
     create_time = Column(DateTime, nullable=False)
@@ -31,8 +29,6 @@ class Datasource(Base):
     datasource_type = Column(String, nullable=False)
     view_metadata_port = Column(String)
     description = Column(String)
-    LOCAL_TYPE = 'LOCAL'
-    HDFS_TYPE = 'HDFS'
 
     def __repr__(self):
         return '<Datasource %r %r>' % (self.id, self.name)
@@ -140,46 +136,19 @@ class AlgorithmOutputDataPatterns(Base):
 class Model(Base):
     __tablename__ = 'model'
 
-    id = Column(String, primary_key=True)
-    name = Column(String, unique=True, nullable=False)
-    parallelism = Column(Integer)
-    description = Column(String)
-    help = Column(String)
+    id = Column(String, primary_key=True, name='plt_cus_oid')
+    name = Column(String, unique=True, nullable=False, name='plt_cus_modelName')
+    description = Column(String, name='plt_cus_modelDescription')
+    usage = Column(String, name='plt_cus_modelUsage')
     create_time = Column(DateTime, nullable=False)
     update_time = Column(DateTime)
     model_path = Column(String, nullable=False)
     log_path = Column(String)
-    input_data_patterns = relationship("ModelInputDataPatterns", back_populates='model', lazy='dynamic')
-    output_data_patterns = relationship("ModelOutputDataPatterns", back_populates='model', lazy='dynamic')
+    input_data_patterns = Column(String, nullable=False, name='plt_cus_modelInputPatterns')
+    output_data_patterns = Column(String, nullable=False, name='plt_cus_modelOutputPatterns')
 
     def __repr__(self):
         return '<Model %r %r>' % (self.id, self.name)
-
-
-class ModelInputDataPatterns(Base):
-    __tablename__ = 'model_input_data_patterns'
-
-    id = Column(String, primary_key=True)
-    model_id = Column(String, ForeignKey('model.id'))
-    model = relationship("Model", back_populates='input_data_patterns')
-    pattern_id = Column(String, ForeignKey('datapattern.id'))
-    index = Column(Integer, nullable=False)
-
-    def __repr__(self):
-        return '<ModelInputDataPatterns %r %r>' % (self.id, self.model_id)
-
-
-class ModelOutputDataPatterns(Base):
-    __tablename__ = 'model_output_data_patterns'
-
-    id = Column(String, primary_key=True)
-    model_id = Column(String, ForeignKey('model.id'))
-    model = relationship("Model", back_populates='output_data_patterns')
-    pattern_id = Column(String, ForeignKey('datapattern.id'))
-    index = Column(Integer, nullable=False)
-
-    def __repr__(self):
-        return '<ModelOutputDataPatterns %r %r>' % (self.id, self.model_id)
 
 
 def build_session(deploy_config):
