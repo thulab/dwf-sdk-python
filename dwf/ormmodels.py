@@ -66,7 +66,7 @@ class DataPattern(Base):
 
 
 class Algorithm(Base):
-    __tablename__ = 'algorithm'
+    __tablename__ = 'plt_cus_algorithm'
 
     id = Column(String, primary_key=True, name='plt_cus_oid')
     algInputPatterns = Column(String, name='plt_cus_algInputPatterns')
@@ -78,9 +78,9 @@ class Algorithm(Base):
     available = Column(Integer, nullable=False, name='plt_cus_available')
     description = Column(String, name='plt_cus_description')
     entryName = Column(String, name='plt_cus_entryName')
-    isBuildIn = Column(Boolean, name='plt_cus_isBuildIn')
-    isDeleted = Column(Integer, name='plt_cus_isDeleted')
-    isLearning = Column(String, name='plt_cus_isLearning')
+    isbuiltin = Column(Boolean, name='plt_cus_isbuiltin')
+    isdeleted = Column(Integer, name='plt_cus_isdeleted')
+    islearning = Column(String, name='plt_cus_islearning')
     modelInputPatterns = Column(String, name='plt_cus_modelInputPatterns')
     modelOutputPatterns = Column(String, name='plt_cus_modelOutputPatterns')
     package_id = Column(String, name='plt_cus_packageID')
@@ -94,20 +94,13 @@ class Algorithm(Base):
 
 
 class Package(Base):
-    __tablename__ = 'plt_cus_algorithmPackage'
+    __tablename__ = 'plt_cus_package'
 
-    id = Column(String, primary_key=True, name='plt_oid')
-    subid = Column(String, name='plt_id')
-    creator = Column(String, name='plt_creator')
-    owner = Column(String, name='plt_owner')
-    current_process = Column(String, name='plt_currentProcess')
-    last_modifier = Column(String, name='plt_lastModifier')
-    create_time = Column(DateTime, nullable=False, name='plt_createTime')
-    update_ime = Column(DateTime, name='plt_lastModifyTime')
-    name = Column(String, unique=True, nullable=False, name='plt_packageName')
-    description = Column(String, name='plt_packageDescription')
-    package_source = Column(String, nullable=False, name='plt_packageSource')
-    package_path = Column(String, nullable=False, name='plt_packagePath')
+    id = Column(String, primary_key=True, name='plt_cus_oid')
+    name = Column(String, unique=True, nullable=False, name='plt_cus_packageName')
+    description = Column(String, name='plt_cus_packageDescription')
+    package_source = Column(String, nullable=False, name='plt_cus_packageSource')
+    package_path = Column(String, nullable=False, name='plt_cus_packagePath')
 
     def __repr__(self):
         return '<Package %r %r>' % (self.id, self.name)
