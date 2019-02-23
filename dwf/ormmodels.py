@@ -17,39 +17,48 @@ Base = declarative_base()
 
 
 class Datasource(Base):
-    __tablename__ = 'datasource'
-    # __mapper_args__ = {'column_prefix': 'plt_cus_'}
+    __tablename__ = 'plt_cus_datasource'
 
-    id = Column(String, primary_key=True)
-    create_time = Column(DateTime, nullable=False)
-    update_time = Column(DateTime)
-    name = Column(String, unique=True, nullable=False)
-    hostname = Column(String, nullable=False)
-    port = Column(String, nullable=False)
-    username = Column(String)
-    password = Column(String)
-    datasource_type = Column(String, nullable=False)
-    view_metadata_port = Column(String)
-    description = Column(String)
+    id = Column(String, primary_key=True, name='plt_cus_oid')
+    create_time = Column(DateTime, nullable=False, name='plt_cus_createTime')
+    update_time = Column(DateTime, name='plt_cus_updateTime')
+    name = Column(String, unique=True, nullable=False, name='plt_cus_dataSourceName')
+    username = Column(String, name='plt_cus_userName')
+    password = Column(String, name='plt_cus_password')
+    datasource_type = Column(String, nullable=False, name='plt_cus_dataSourceType')
+    view_metadata_port = Column(String, name='plt_cus_viewMetadataPort')
+    description = Column(String, name='plt_cus_description')
     LOCAL_TYPE = 'LOCAL'
     HDFS_TYPE = 'HDFS'
+
+    database_name = Column(String, name='plt_cus_databaseName')
+    data_file_format = Column(String, name='plt_cus_dataFileFormat')
+    folder_depth = Column(String, name='plt_cus_folderDepth')
+    param1 = Column(String, name='plt_cus_param1')
+    server_ip = Column(String, nullable=False, name='plt_cus_serverIp')
+    server_port = Column(String, nullable=False, name='plt_cus_serverPort')
+    workbench_url = Column(String, name='plt_cus_workbenchUrl')
 
     def __repr__(self):
         return '<Datasource %r %r>' % (self.id, self.name)
 
 
 class Dataset(Base):
-    __tablename__ = 'dataset'
+    __tablename__ = 'plt_cus_dataset'
 
-    id = Column(String, primary_key=True)
-    name = Column(String, unique=True, nullable=False)
-    create_time = Column(DateTime, nullable=False)
-    update_time = Column(DateTime)
-    pattern_id = Column(String, ForeignKey('datapattern.id'), nullable=False)
-    pattern = relationship("DataPattern")
-    datasource_id = Column(String, ForeignKey('datasource.id'), nullable=False)
-    filter = Column(String, nullable=False)
-    description = Column(String)
+    id = Column(String, primary_key=True, name='plt_cus_oid')
+    name = Column(String, unique=True, nullable=False, name='plt_cus_dataSetName')
+    create_time = Column(DateTime, nullable=False, name='plt_cus_createTime')
+    update_ime = Column(DateTime, name='plt_cus_updateTime')
+    patterns = Column(String, nullable=False, name='plt_cus_dataPattern4Learning')
+    datasource_id = Column(String, nullable=False, name='plt_cus_dataSourceId')
+    filter = Column(String, nullable=False, name='plt_cus_filterString')
+    description = Column(String, name='plt_cus_description')
+
+    data_file_format = Column(String, name='plt_cus_dataFileFormat')
+    default_filter_string = Column(String, name='plt_cus_defaultFilterString')
+    target_entity_class = Column(String, name='plt_cus_targetEntityClass')
+
 
     def __repr__(self):
         return '<Dataset %r %r>' % (self.id, self.name)
