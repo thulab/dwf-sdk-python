@@ -1,0 +1,7 @@
+*.pyc
+*__pycache__
+build/
+dist/
+dwf_sdk_python.egg-info/
+.idea/
+*run.log

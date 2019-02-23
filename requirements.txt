@@ -1,0 +1,13 @@
+numpy>=1.9
+scikit-learn>=0.19
+keras>=2.1
+tensorflow>=1.4
+h5py>=2.7.1
+pandas>=0.10.3
+protobuf>=3.5.1
+psutil>=5.4.0
+scipy>=1.0.0
+six>=1.10.0
+Flask>=1.0.2
+sqlalchemy>=1.2
+hdfs>=2.1.0
