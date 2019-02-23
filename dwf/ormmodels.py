@@ -70,7 +70,7 @@ class DataPattern(Base):
 
 
 class Algorithm(Base):
-    __tablename__ = 'algorithm'
+    __tablename__ = 'plt_cus_algorithm'
 
     id = Column(String, primary_key=True, name='plt_cus_oid')
     algInputPatterns = Column(String, name='plt_cus_algInputPatterns')
@@ -82,9 +82,9 @@ class Algorithm(Base):
     available = Column(Integer, nullable=False, name='plt_cus_available')
     description = Column(String, name='plt_cus_description')
     entryName = Column(String, name='plt_cus_entryName')
-    isBuildIn = Column(Boolean, name='plt_cus_isBuildIn')
-    isDeleted = Column(Integer, name='plt_cus_isDeleted')
-    isLearning = Column(String, name='plt_cus_isLearning')
+    isbuiltin = Column(Boolean, name='plt_cus_isbuiltin')
+    isdeleted = Column(Integer, name='plt_cus_isdeleted')
+    islearning = Column(String, name='plt_cus_islearning')
     modelInputPatterns = Column(String, name='plt_cus_modelInputPatterns')
     modelOutputPatterns = Column(String, name='plt_cus_modelOutputPatterns')
     package_id = Column(String, name='plt_cus_packageID')
@@ -98,16 +98,13 @@ class Algorithm(Base):
 
 
 class Package(Base):
-    __tablename__ = 'package'
+    __tablename__ = 'plt_cus_package'
 
-    id = Column(String, primary_key=True)
-    create_time = Column(DateTime, nullable=False)
-    update_time = Column(DateTime)
-    name = Column(String, unique=True, nullable=False)
-    description = Column(String)
-    package_source = Column(String, nullable=False)
-    package_path = Column(String, nullable=False)
-    algorithms = relationship("Algorithm", back_populates='package', lazy='dynamic')
+    id = Column(String, primary_key=True, name='plt_cus_oid')
+    name = Column(String, unique=True, nullable=False, name='plt_cus_packageName')
+    description = Column(String, name='plt_cus_packageDescription')
+    package_source = Column(String, nullable=False, name='plt_cus_packageSource')
+    package_path = Column(String, nullable=False, name='plt_cus_packagePath')
 
     def __repr__(self):
         return '<Package %r %r>' % (self.id, self.name)
