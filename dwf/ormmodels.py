@@ -72,22 +72,26 @@ class DataPattern(Base):
 class Algorithm(Base):
     __tablename__ = 'algorithm'
 
-    id = Column(String, primary_key=True)
-    create_time = Column(DateTime, nullable=False)
-    update_time = Column(DateTime)
-    name = Column(String, unique=True, nullable=False)
-    description = Column(String)
-    example_model_id = Column(String, ForeignKey('model.id'))
-    example_model = relationship("Model")
-    learning = Column(Integer, nullable=False)
-    available = Column(Integer, nullable=False)
-    deleted = Column(Integer)
-    package_id = Column(String, ForeignKey('package.id'))
-    package = relationship("Package", back_populates='algorithms')
-    main_file_name = Column(String)
-    hyperparameter_config = Column(String)
-    input_data_patterns = relationship("AlgorithmInputDataPatterns", back_populates='algorithm', lazy='dynamic')
-    output_data_patterns = relationship("AlgorithmOutputDataPatterns", back_populates='algorithm', lazy='dynamic')
+    id = Column(String, primary_key=True, name='plt_cus_oid')
+    algInputPatterns = Column(String, name='plt_cus_algInputPatterns')
+    displayName = Column(String, name='plt_cus_algorithmDisplayName')
+    name = Column(String, unique=True, nullable=False, name='plt_cus_algorithmName')
+    type = Column(String, name='plt_cus_algorithmType')
+    algOutputPatterns = Column(String, name='plt_cus_algOutputPatterns')
+    parameters = Column(String, name='plt_cus_algParameters')
+    available = Column(Integer, nullable=False, name='plt_cus_available')
+    description = Column(String, name='plt_cus_description')
+    entryName = Column(String, name='plt_cus_entryName')
+    isBuildIn = Column(Boolean, name='plt_cus_isBuildIn')
+    isDeleted = Column(Integer, name='plt_cus_isDeleted')
+    isLearning = Column(String, name='plt_cus_isLearning')
+    modelInputPatterns = Column(String, name='plt_cus_modelInputPatterns')
+    modelOutputPatterns = Column(String, name='plt_cus_modelOutputPatterns')
+    package_id = Column(String, name='plt_cus_packageID')
+    progLanguage = Column(String, name='plt_cus_progLanguage')
+    referenceCount = Column(Integer, name='plt_cus_referenceCount')
+    runtime = Column(String, name='plt_cus_runtime')
+    tag = Column(String, name='plt_cus_tag')
 
     def __repr__(self):
         return '<Algorithm %r %r>' % (self.id, self.name)
@@ -108,35 +112,6 @@ class Package(Base):
     def __repr__(self):
         return '<Package %r %r>' % (self.id, self.name)
 
-
-class AlgorithmInputDataPatterns(Base):
-    __tablename__ = 'algorithm_input_data_patterns'
-
-    id = Column(String, primary_key=True)
-    algorithm_id = Column(String, ForeignKey('algorithm.id'))
-    algorithm = relationship("Algorithm", back_populates='input_data_patterns')
-    pattern_id = Column(String, ForeignKey('datapattern.id'))
-    pattern = relationship("DataPattern")
-    index = Column(Integer, nullable=False)
-
-    def __repr__(self):
-        return '<AlgorithmInputDataPatterns %r %r>' % (self.id, self.algorithm_id)
-
-
-class AlgorithmOutputDataPatterns(Base):
-    __tablename__ = 'algorithm_output_data_patterns'
-
-    id = Column(String, primary_key=True)
-    algorithm_id = Column(String, ForeignKey('algorithm.id'))
-    algorithm = relationship("Algorithm", back_populates='output_data_patterns')
-    pattern_id = Column(String, ForeignKey('datapattern.id'))
-    pattern = relationship("DataPattern")
-    index = Column(Integer, nullable=False)
-
-    def __repr__(self):
-        return '<AlgorithmOutputDataPatterns %r %r>' % (self.id, self.algorithm_id)
-
-
 class Model(Base):
     __tablename__ = 'model'
 
@@ -154,33 +129,6 @@ class Model(Base):
 
     def __repr__(self):
         return '<Model %r %r>' % (self.id, self.name)
-
-
-class ModelInputDataPatterns(Base):
-    __tablename__ = 'model_input_data_patterns'
-
-    id = Column(String, primary_key=True)
-    model_id = Column(String, ForeignKey('model.id'))
-    model = relationship("Model", back_populates='input_data_patterns')
-    pattern_id = Column(String, ForeignKey('datapattern.id'))
-    index = Column(Integer, nullable=False)
-
-    def __repr__(self):
-        return '<ModelInputDataPatterns %r %r>' % (self.id, self.model_id)
-
-
-class ModelOutputDataPatterns(Base):
-    __tablename__ = 'model_output_data_patterns'
-
-    id = Column(String, primary_key=True)
-    model_id = Column(String, ForeignKey('model.id'))
-    model = relationship("Model", back_populates='output_data_patterns')
-    pattern_id = Column(String, ForeignKey('datapattern.id'))
-    index = Column(Integer, nullable=False)
-
-    def __repr__(self):
-        return '<ModelOutputDataPatterns %r %r>' % (self.id, self.model_id)
-
 
 def build_session(deploy_config):
     # the parameter configuration of connecting the PostgreSql database
