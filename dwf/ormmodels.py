@@ -139,13 +139,13 @@ class Model(Base):
     id = Column(String, primary_key=True, name='plt_cus_oid')
     name = Column(String, unique=True, nullable=False, name='plt_cus_modelName')
     description = Column(String, name='plt_cus_modelDescription')
+    input_data_patterns = Column(String, nullable=False, name='plt_cus_modelInputPatterns')
+    output_data_patterns = Column(String, nullable=False, name='plt_cus_modelOutputPatterns')
+    model_path = Column(String, nullable=False, name='plt_cus_modelPath')
+    model_resource = Column(String, nullable=False, name='plt_cus_modelResource')
     usage = Column(String, name='plt_cus_modelUsage')
     create_time = Column(DateTime, nullable=False)
     update_time = Column(DateTime)
-    model_path = Column(String, nullable=False)
-    log_path = Column(String)
-    input_data_patterns = Column(String, nullable=False, name='plt_cus_modelInputPatterns')
-    output_data_patterns = Column(String, nullable=False, name='plt_cus_modelOutputPatterns')
 
     def __repr__(self):
         return '<Model %r %r>' % (self.id, self.name)
