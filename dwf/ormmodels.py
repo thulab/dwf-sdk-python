@@ -87,7 +87,7 @@ class Algorithm(Base):
     available = Column(Integer, nullable=False, name='plt_cus_available')
     isbuiltin = Column(Integer, name='plt_cus_isbuiltin')
     isdeleted = Column(Integer, name='plt_cus_isdeleted')
-    islearning = Column(String, name='plt_cus_islearning')
+    islearning = Column(Integer, name='plt_cus_islearning')
     model_input_patterns = Column(String, name='plt_cus_modelInputPatterns')
     model_output_patterns = Column(String, name='plt_cus_modelOutputPatterns')
     package_id = Column(String, name='plt_cus_packageID')
