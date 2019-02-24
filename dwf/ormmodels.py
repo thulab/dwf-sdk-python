@@ -85,7 +85,7 @@ class Algorithm(Base):
     parameters = Column(String, name='plt_cus_algParameters')
     entry_name = Column(String, name='plt_cus_entryName')
     available = Column(Integer, nullable=False, name='plt_cus_available')
-    isbuiltin = Column(Boolean, name='plt_cus_isbuiltin')
+    isbuiltin = Column(Integer, name='plt_cus_isbuiltin')
     isdeleted = Column(Integer, name='plt_cus_isdeleted')
     islearning = Column(String, name='plt_cus_islearning')
     model_input_patterns = Column(String, name='plt_cus_modelInputPatterns')
