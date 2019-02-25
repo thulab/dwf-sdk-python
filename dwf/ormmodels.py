@@ -78,7 +78,7 @@ class Algorithm(Base):
     update_ime = Column(DateTime, name='plt_cus_lastModifyTime')
     name = Column(String, unique=True, nullable=False, name='plt_cus_algorithmName')
     display_name = Column(String, name='plt_cus_algorithmDisplayName')
-    type = Column(String, name='plt_cus_algorithmType')
+    algorithm_type = Column(String, name='plt_cus_algorithmType')
     description = Column(String, name='plt_cus_description')
     alg_input_patterns = Column(String, name='plt_cus_algInputPatterns')
     alg_output_patterns = Column(String, name='plt_cus_algOutputPatterns')
