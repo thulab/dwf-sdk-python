@@ -16,7 +16,9 @@ class DatasetCRUD:
     def __init__(self, db_session):
         self.db_session = db_session
 
-    def add_dataset(self, name, pattern_id, datasource_id, filter=None, description=None):
+    def add_dataset(self, name, data_file_format, datasource_id, filter, folder_depth, patterns,
+                    subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
+                    default_filter_string=None, target_entity_class=None):
         '''
             Register a dataset into the metadata DB.
 
@@ -34,8 +36,11 @@ class DatasetCRUD:
         id = generate_primary_key('DSET')
         create_time = datetime.now()
 
-        dataset = Dataset(id=id, create_time=create_time, name=name, pattern_id=pattern_id,
-                          datasource_id=datasource_id, filter=filter, description=description)
+        dataset = Dataset(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
+                          last_modifier=last_modifier, create_time=create_time,
+                          name=name, data_file_format=data_file_format, datasource_id=datasource_id,
+                          default_filter_string=default_filter_string, filter=filter, folder_depth=folder_depth,
+                          patterns=patterns, target_entity_class=target_entity_class)
         self.db_session.add(dataset)
         self.db_session.commit()
         return id
