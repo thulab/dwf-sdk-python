@@ -28,7 +28,8 @@ class ModelCRUD:
         models = self.db_session.query(Model).all()
         return models
 
-    def add_model(self, name, input_data_patterns, output_data_patterns, subid=None, creator=None, owner=None,
+    def add_model(self, name, algorithm_id, input_data_patterns, output_data_patterns, subid=None, creator=None,
+                  owner=None,
                   current_process=None, last_modifier=None, description=None, model_path=None, model_resource=None,
                   usage=None):
         # add a model
@@ -36,9 +37,10 @@ class ModelCRUD:
         create_time = datetime.now()
 
         model = Model(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
-                      last_modifier=last_modifier, create_time=create_time, name=name, description=description,
-                      input_data_patterns=input_data_patterns, output_data_patterns=output_data_patterns,
-                      model_path=model_path, model_resource=model_resource, usage=usage)
+                      last_modifier=last_modifier, create_time=create_time, name=name, algorithm_id=algorithm_id,
+                      description=description, input_data_patterns=input_data_patterns,
+                      output_data_patterns=output_data_patterns, model_path=model_path, model_resource=model_resource,
+                      usage=usage)
 
         self.db_session.add(model)
         self.db_session.commit()
@@ -52,8 +54,8 @@ class ModelCRUD:
         return
 
     def update_model(self, model_id, subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
-                     name=None, description=None, input_data_patterns=None, output_data_patterns=None, model_path=None,
-                     model_resource=None, usage=None):
+                     name=None, algorithm_id=None, description=None, input_data_patterns=None,
+                     output_data_patterns=None, model_path=None, model_resource=None, usage=None):
         # update a model with param
         pending = self.db_session.query(Model).get(model_id)
         if model_id is None:
@@ -66,16 +68,14 @@ class ModelCRUD:
             pending.creator = creator
         if owner is not None:
             pending.owner = owner
-        if help is not None:
-            pending.help = help
-        if model_path is not None:
-            pending.model_path = model_path
         if current_process is not None:
             pending.current_process = current_process
         if last_modifier is not None:
             pending.last_modifier = last_modifier
         if name is not None:
             pending.name = name
+        if algorithm_id is not None:
+            pending.algorithm_id = algorithm_id
         if description is not None:
             pending.description = description
         if input_data_patterns is not None:

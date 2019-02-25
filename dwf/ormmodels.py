@@ -131,6 +131,7 @@ class Model(Base):
     last_modifier = Column(String, name='plt_cus_lastModifier')
     create_time = Column(DateTime, nullable=False, name='plt_cus_createTime')
     update_time = Column(DateTime, name='plt_cus_lastModifyTime')
+    algorithm_id = Column(String, name='plt_cus_AlgorithmID')
     name = Column(String, unique=True, nullable=False, name='plt_cus_modelName')
     description = Column(String, name='plt_cus_modelDescription')
     input_data_patterns = Column(String, nullable=False, name='plt_cus_modelInputPatterns')
