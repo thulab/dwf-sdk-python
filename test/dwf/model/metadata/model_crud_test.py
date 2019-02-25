@@ -30,23 +30,30 @@ class TestCRUD(unittest.TestCase):
 
     def _add_model(self, case_data):
         model_instance = case_data['model']
-        self._model_instance = self.test_db_session.query(Model).filter_by(
-            name=model_instance.name).first()
-        if self._model_instance is not None:
-            self.test_db_session.delete(self._model_instance)
-            self.test_db_session.commit()
-        model_id = self.cruder.add_model(name=model_instance.name,model_path=model_instance.model_path,
-                             description=model_instance.description,help = model_instance.help,
-                             log_path=model_instance.log_path)
+        model_id = self.cruder.add_model(subid=model_instance.subid, creator=model_instance.creator,
+                                         owner=model_instance.owner, current_process=model_instance.current_process,
+                                         last_modifier=model_instance.last_modifier, name=model_instance.name,
+                                         description=model_instance.description,
+                                         input_data_patterns=model_instance.input_data_patterns,
+                                         output_data_patterns=model_instance.output_data_patterns,
+                                         model_path=model_instance.model_path,
+                                         model_resource=model_instance.model_resource, usage=model_instance.usage)
         model_db_instance = self.test_db_session.query(Model).get(model_id)
 
+        self.assertEqual(model_db_instance.subid, model_instance.subid)
+        self.assertEqual(model_db_instance.creator, model_instance.creator)
+        self.assertEqual(model_db_instance.owner, model_instance.owner)
+        self.assertEqual(model_db_instance.current_process, model_instance.current_process)
+        self.assertEqual(model_db_instance.last_modifier, model_instance.last_modifier)
         self.assertEqual(model_db_instance.name, model_instance.name)
-        self.assertEqual(model_db_instance.model_path, model_instance.model_path)
         self.assertEqual(model_db_instance.description, model_instance.description)
-        self.assertEqual(model_db_instance.help, model_instance.help)
-        self.assertEqual(model_db_instance.log_path, model_instance.log_path)
+        self.assertEqual(model_db_instance.input_data_patterns, model_instance.input_data_patterns)
+        self.assertEqual(model_db_instance.output_data_patterns, model_instance.output_data_patterns)
+        self.assertEqual(model_db_instance.model_path, model_instance.model_path)
+        self.assertEqual(model_db_instance.model_resource, model_instance.model_resource)
+        self.assertEqual(model_db_instance.usage, model_instance.usage)
 
-        self.test_db_session.delete(model_db_instance)
+        # self.test_db_session.delete(model_db_instance)
         self.test_db_session.commit()
 
 

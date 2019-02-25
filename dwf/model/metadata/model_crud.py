@@ -11,7 +11,7 @@
 from dwf.ormmodels import Model, datetime
 from dwf.common.log import logger
 from dwf.common.exception import *
-from dwf.util.id import generate_primary_key
+import uuid
 
 
 class ModelCRUD:
@@ -28,14 +28,18 @@ class ModelCRUD:
         models = self.db_session.query(Model).all()
         return models
 
-    def add_model(self, name, model_path, parallelism=None, description=None, help=None, log_path=None):
+    def add_model(self, name, input_data_patterns, output_data_patterns, subid=None, creator=None, owner=None,
+                  current_process=None, last_modifier=None, description=None, model_path=None, model_resource=None,
+                  usage=None):
         # add a model
-        id = generate_primary_key('SERV')
+        id = str(uuid.uuid1()).replace('-', '')
         create_time = datetime.now()
 
-        model = Model(id=id, name=name, parallelism=parallelism, description=description, help=help,
-                      create_time=create_time,
-                      model_path=model_path, log_path=log_path)
+        model = Model(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
+                      last_modifier=last_modifier, create_time=create_time, name=name, description=description,
+                      input_data_patterns=input_data_patterns, output_data_patterns=output_data_patterns,
+                      model_path=model_path, model_resource=model_resource, usage=usage)
+
         self.db_session.add(model)
         self.db_session.commit()
         return id
@@ -47,26 +51,43 @@ class ModelCRUD:
         self.db_session.commit()
         return
 
-    def modify_model(self, model_id, name=None, parallelism=None, description=None, help=None, model_path=None,
-                     log_path=None):
-        # modify a model with
+    def update_model(self, model_id, subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
+                     name=None, description=None, input_data_patterns=None, output_data_patterns=None, model_path=None,
+                     model_resource=None, usage=None):
+        # update a model with param
         pending = self.db_session.query(Model).get(model_id)
         if model_id is None:
             logger.error('model_id is needed')
             raise PARAM_LACK
 
-        if name is not None:
-            pending.name = name
-        if description is not None:
-            pending.description = description
-        if parallelism is not None:
-            pending.parallelism = parallelism
+        if subid is not None:
+            pending.subid = subid
+        if creator is not None:
+            pending.creator = creator
+        if owner is not None:
+            pending.owner = owner
         if help is not None:
             pending.help = help
         if model_path is not None:
             pending.model_path = model_path
-        if log_path is not None:
-            pending.log_path = log_path
+        if current_process is not None:
+            pending.current_process = current_process
+        if last_modifier is not None:
+            pending.last_modifier = last_modifier
+        if name is not None:
+            pending.name = name
+        if description is not None:
+            pending.description = description
+        if input_data_patterns is not None:
+            pending.input_data_patterns = input_data_patterns
+        if output_data_patterns is not None:
+            pending.output_data_patterns = output_data_patterns
+        if model_path is not None:
+            pending.model_path = model_path
+        if model_resource is not None:
+            pending.model_resource = model_resource
+        if usage is not None:
+            pending.usage = usage
 
         pending.update_time = datetime.now()
         self.db_session.commit()

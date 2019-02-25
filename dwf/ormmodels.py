@@ -130,13 +130,13 @@ class Model(Base):
     current_process = Column(String, name='plt_cus_currentProcess')
     last_modifier = Column(String, name='plt_cus_lastModifier')
     create_time = Column(DateTime, nullable=False, name='plt_cus_createTime')
-    update_ime = Column(DateTime, name='plt_cus_lastModifyTime')
+    update_time = Column(DateTime, name='plt_cus_lastModifyTime')
     name = Column(String, unique=True, nullable=False, name='plt_cus_modelName')
     description = Column(String, name='plt_cus_modelDescription')
     input_data_patterns = Column(String, nullable=False, name='plt_cus_modelInputPatterns')
     output_data_patterns = Column(String, nullable=False, name='plt_cus_modelOutputPatterns')
     model_path = Column(String, nullable=False, name='plt_cus_modelPath')
-    model_resource = Column(String, nullable=False, name='plt_cus_modelResource')
+    model_resource = Column(String, name='plt_cus_modelResource')
     usage = Column(String, name='plt_cus_modelUsage')
 
     def __repr__(self):
