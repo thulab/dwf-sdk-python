@@ -19,25 +19,26 @@ Base = declarative_base()
 class Datasource(Base):
     __tablename__ = 'plt_cus_datasource'
 
-    id = Column(String, primary_key=True, name='plt_cus_oid')
-    create_time = Column(DateTime, nullable=False, name='plt_cus_createTime')
-    update_time = Column(DateTime, name='plt_cus_updateTime')
-    name = Column(String, unique=True, nullable=False, name='plt_cus_dataSourceName')
-    username = Column(String, name='plt_cus_userName')
-    password = Column(String, name='plt_cus_password')
-    datasource_type = Column(String, nullable=False, name='plt_cus_dataSourceType')
-    view_metadata_port = Column(String, name='plt_cus_viewMetadataPort')
-    description = Column(String, name='plt_cus_description')
-    LOCAL_TYPE = 'LOCAL'
-    HDFS_TYPE = 'HDFS'
+    id = Column(String, primary_key=True, name='plt_oid')
+    subid = Column(String, name='plt_id')
+    creator = Column(String, name='plt_creator')
+    owner = Column(String, name='plt_owner')
+    current_process = Column(String, name='plt_currentProcess')
+    last_modifier = Column(String, name='plt_lastModifier')
+    create_time = Column(DateTime, nullable=False, name='plt_createTime')
+    update_time = Column(DateTime, name='plt_lastModifyTime')
 
-    database_name = Column(String, name='plt_cus_databaseName')
-    data_file_format = Column(String, name='plt_cus_dataFileFormat')
-    folder_depth = Column(String, name='plt_cus_folderDepth')
-    param1 = Column(String, name='plt_cus_param1')
-    server_ip = Column(String, nullable=False, name='plt_cus_serverIp')
-    server_port = Column(String, nullable=False, name='plt_cus_serverPort')
-    workbench_url = Column(String, name='plt_cus_workbenchUrl')
+    name = Column(String, unique=True, nullable=False, name='plt_dataSourceName')
+    database_name = Column(String, name='plt_databaseName')
+    data_file_format = Column(String, name='plt_dataFileFormat')
+    datasource_type = Column(String, nullable=False, name='plt_dataSourceType')
+    description = Column(String, name='plt_description')
+    param1 = Column(String, name='plt_param1')
+    password = Column(String, name='plt_password')
+    server_ip = Column(String, nullable=False, name='plt_serverIp')
+    server_port = Column(String, nullable=False, name='plt_serverPort')
+    username = Column(String, name='plt_userName')
+    workbench_url = Column(String, name='plt_workbenchUrl')
 
     def __repr__(self):
         return '<Datasource %r %r>' % (self.id, self.name)
@@ -46,19 +47,25 @@ class Datasource(Base):
 class Dataset(Base):
     __tablename__ = 'plt_cus_dataset'
 
-    id = Column(String, primary_key=True, name='plt_cus_oid')
-    name = Column(String, unique=True, nullable=False, name='plt_cus_dataSetName')
-    create_time = Column(DateTime, nullable=False, name='plt_cus_createTime')
-    update_ime = Column(DateTime, name='plt_cus_updateTime')
-    patterns = Column(String, nullable=False, name='plt_cus_dataPattern4Learning')
-    datasource_id = Column(String, nullable=False, name='plt_cus_dataSourceId')
-    filter = Column(String, nullable=False, name='plt_cus_filterString')
-    description = Column(String, name='plt_cus_description')
+    id = Column(String, primary_key=True, name='plt_oid')
+    subid = Column(String, name='plt_id')
+    creator = Column(String, name='plt_creator')
+    owner = Column(String, name='plt_owner')
+    current_process = Column(String, name='plt_currentProcess')
+    last_modifier = Column(String, name='plt_lastModifier')
+    create_time = Column(DateTime, nullable=False, name='plt_createTime')
+    update_time = Column(DateTime, name='plt_lastModifyTime')
 
-    data_file_format = Column(String, name='plt_cus_dataFileFormat')
-    default_filter_string = Column(String, name='plt_cus_defaultFilterString')
-    target_entity_class = Column(String, name='plt_cus_targetEntityClass')
+    description = Column(String, name='plt_description')
 
+    name = Column(String, unique=True, nullable=False, name='plt_dataSetName')
+    data_file_format = Column(String, name='plt_dataFileFormat')
+    datasource_id = Column(String, nullable=False, name='plt_dataSourceId')
+    default_filter_string = Column(String, name='plt_defaultFilterString')
+    filter = Column(String, nullable=False, name='plt_filterString')
+    folder_depth = Column(String, name='plt_folderDepth')
+    patterns = Column(String, nullable=False, name='plt_dataPattern4Learning')
+    target_entity_class = Column(String, name='plt_targetEntityClass')
 
     def __repr__(self):
         return '<Dataset %r %r>' % (self.id, self.name)
@@ -118,6 +125,7 @@ class Package(Base):
     def __repr__(self):
         return '<Package %r %r>' % (self.id, self.name)
 
+
 class Model(Base):
     __tablename__ = 'model'
 
@@ -135,6 +143,7 @@ class Model(Base):
 
     def __repr__(self):
         return '<Model %r %r>' % (self.id, self.name)
+
 
 def build_session(deploy_config):
     # the parameter configuration of connecting the PostgreSql database
