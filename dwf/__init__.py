@@ -4,4 +4,4 @@ from pkgutil import extend_path
 
 __path__ = extend_path(__path__, __name__)
 
-__all__ = ['algorithm', 'common', 'datapattern', 'dataset', 'datasource', 'model', 'package', 'util']
+__all__ = ['algorithm', 'common', 'dataset', 'datasource', 'model', 'package', 'util']
