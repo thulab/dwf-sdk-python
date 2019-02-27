@@ -71,75 +71,80 @@ class Dataset(Base):
         return '<Dataset %r %r>' % (self.id, self.name)
 
 
-class DataPattern(Base):
-    __tablename__ = 'datapattern'
-
-    id = Column(String, primary_key=True)
-    name = Column(String, unique=True, nullable=False)
-    data_type = Column(String)
-    organization = Column(String)
-    organization_parameter = Column(String)
-    semantic = Column(String)
-
-    def __repr__(self):
-        return '<DataPattern %r %r>' % (self.id, self.name)
-
-
 class Algorithm(Base):
     __tablename__ = 'plt_cus_algorithm'
 
-    id = Column(String, primary_key=True, name='plt_cus_oid')
-    algInputPatterns = Column(String, name='plt_cus_algInputPatterns')
-    displayName = Column(String, name='plt_cus_algorithmDisplayName')
-    name = Column(String, unique=True, nullable=False, name='plt_cus_algorithmName')
-    type = Column(String, name='plt_cus_algorithmType')
-    algOutputPatterns = Column(String, name='plt_cus_algOutputPatterns')
-    parameters = Column(String, name='plt_cus_algParameters')
-    available = Column(Integer, nullable=False, name='plt_cus_available')
-    description = Column(String, name='plt_cus_description')
-    entryName = Column(String, name='plt_cus_entryName')
-    isbuiltin = Column(Boolean, name='plt_cus_isbuiltin')
-    isdeleted = Column(Integer, name='plt_cus_isdeleted')
-    islearning = Column(String, name='plt_cus_islearning')
-    modelInputPatterns = Column(String, name='plt_cus_modelInputPatterns')
-    modelOutputPatterns = Column(String, name='plt_cus_modelOutputPatterns')
-    package_id = Column(String, name='plt_cus_packageID')
-    progLanguage = Column(String, name='plt_cus_progLanguage')
-    referenceCount = Column(Integer, name='plt_cus_referenceCount')
-    runtime = Column(String, name='plt_cus_runtime')
-    tag = Column(String, name='plt_cus_tag')
+    id = Column(String, primary_key=True, name='pl_oid')
+    subid = Column(String, name='plt_id')
+    creator = Column(String, name='plt_creator')
+    owner = Column(String, name='plt_owner')
+    current_process = Column(String, name='plt_currentProcess')
+    last_modifier = Column(String, name='plt_lastModifier')
+    create_time = Column(DateTime, nullable=False, name='plt_createTime')
+    update_ime = Column(DateTime, name='plt_lastModifyTime')
+    name = Column(String, unique=True, nullable=False, name='plt_algorithmName')
+    display_name = Column(String, name='plt_algorithmDisplayName')
+    algorithm_type = Column(String, name='plt_algorithmType')
+    description = Column(String, name='plt_description')
+    alg_input_patterns = Column(String, name='plt_algInputPatterns')
+    alg_output_patterns = Column(String, name='plt_algOutputPatterns')
+    parameters = Column(String, name='plt_algParameters')
+    entry_name = Column(String, name='plt_entryName')
+    available = Column(Integer, nullable=False, name='plt_available')
+    isbuiltin = Column(Integer, name='plt_isbuiltin')
+    isdeleted = Column(Integer, name='plt_isdeleted')
+    islearning = Column(Integer, name='plt_islearning')
+    model_input_patterns = Column(String, name='plt_modelInputPatterns')
+    model_output_patterns = Column(String, name='plt_modelOutputPatterns')
+    package_id = Column(String, name='plt_packageID')
+    prog_language = Column(String, name='plt_progLanguage')
+    reference_count = Column(Integer, name='plt_referenceCount')
+    runtime = Column(String, name='plt_runtime')
+    tag = Column(String, name='plt_tag')
 
     def __repr__(self):
         return '<Algorithm %r %r>' % (self.id, self.name)
 
 
 class Package(Base):
-    __tablename__ = 'plt_cus_package'
+    __tablename__ = 'plt_cus_algorithmPackage'
 
-    id = Column(String, primary_key=True, name='plt_cus_oid')
-    name = Column(String, unique=True, nullable=False, name='plt_cus_packageName')
-    description = Column(String, name='plt_cus_packageDescription')
-    package_source = Column(String, nullable=False, name='plt_cus_packageSource')
-    package_path = Column(String, nullable=False, name='plt_cus_packagePath')
+    id = Column(String, primary_key=True, name='plt_oid')
+    subid = Column(String, name='plt_id')
+    creator = Column(String, name='plt_creator')
+    owner = Column(String, name='plt_owner')
+    current_process = Column(String, name='plt_currentProcess')
+    last_modifier = Column(String, name='plt_lastModifier')
+    create_time = Column(DateTime, nullable=False, name='plt_createTime')
+    update_ime = Column(DateTime, name='plt_lastModifyTime')
+    name = Column(String, unique=True, nullable=False, name='plt_packageName')
+    description = Column(String, name='plt_packageDescription')
+    package_source = Column(String, nullable=False, name='plt_packageSource')
+    package_path = Column(String, nullable=False, name='plt_packagePath')
 
     def __repr__(self):
         return '<Package %r %r>' % (self.id, self.name)
 
 
 class Model(Base):
-    __tablename__ = 'model'
+    __tablename__ = 'plt_cus_model'
 
-    id = Column(String, primary_key=True)
-    name = Column(String, unique=True, nullable=False)
-    parallelism = Column(Integer)
-    description = Column(String)
-    help = Column(String)
-    create_time = Column(DateTime, nullable=False)
-    update_time = Column(DateTime)
-    model_path = Column(String, nullable=False)
-    log_path = Column(String)
-    input_data_patterns = relationship("ModelInputDataPatterns", back_populates='model', lazy='dynamic')
-    output_data_patterns = relationship("ModelOutputDataPatterns", back_populates='model', lazy='dynamic')
+    id = Column(String, primary_key=True, name='plt_oid')
+    subid = Column(String, name='plt_id')
+    creator = Column(String, name='plt_creator')
+    owner = Column(String, name='plt_owner')
+    current_process = Column(String, name='plt_currentProcess')
+    last_modifier = Column(String, name='plt_lastModifier')
+    create_time = Column(DateTime, nullable=False, name='plt_createTime')
+    update_time = Column(DateTime, name='plt_lastModifyTime')
+    algorithm_id = Column(String, name='plt_AlgorithmID')
+    name = Column(String, unique=True, nullable=False, name='plt_modelName')
+    description = Column(String, name='plt_modelDescription')
+    input_data_patterns = Column(String, nullable=False, name='plt_modelInputPatterns')
+    output_data_patterns = Column(String, nullable=False, name='plt_modelOutputPatterns')
+    model_path = Column(String, nullable=False, name='plt_modelPath')
+    model_resource = Column(String, name='plt_modelResource')
+    usage = Column(String, name='plt_modelUsage')
 
     def __repr__(self):
         return '<Model %r %r>' % (self.id, self.name)
