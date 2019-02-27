@@ -1,8 +1,7 @@
 # -*- coding:utf-8 -*-
-from dwf.ormmodels import *
+from dwf.ormmodels import Datasource, datetime
 from dwf.common.exception import *
 from dwf.common.log import logger
-from dwf.common.config import test_config
 from dwf.util.id import generate_primary_key
 from dwf.util.update import auto_update
 
@@ -11,9 +10,10 @@ class DataSourceCRUD:
     def __init__(self, db_session):
         self.db_session = db_session
 
-    def add_datasource(self, name, database_name, server_ip=None, server_port=None, workbench_url=None, subid=None,
-                       creator=None, owner=None, current_process=None, last_modifier=None, data_file_format=None,
-                       datasource_type='LOCAL_FS', param1=None, password=None, username=None, description=None):
+    def add_datasource(self, name, subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
+                       data_file_format=None, database_name=None, datasource_type='LOCAL_FS', description=None,
+                       folder_depth=None, param1=None, password=None, server_ip=None, server_port=None, username=None,
+                       workbench_url=None):
         '''
             Register a datasource in the metadata DB of DWF.
             Args:
@@ -40,12 +40,17 @@ class DataSourceCRUD:
         id = generate_primary_key('DSOU')
         create_time = datetime.now()
 
+        if database_name is None:
+            database_name = '/'
+        if folder_depth is None:
+            folder_depth = -1
+
         new_datasource = Datasource(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
                                     last_modifier=last_modifier, create_time=create_time, name=name,
                                     database_name=database_name, data_file_format=data_file_format,
-                                    datasource_type=datasource_type, description=description, param1=param1,
-                                    password=password, server_ip=server_ip, server_port=server_port, username=username,
-                                    workbench_url=workbench_url)
+                                    datasource_type=datasource_type, description=description, folder_depth=folder_depth,
+                                    param1=param1, password=password, server_ip=server_ip, server_port=server_port,
+                                    username=username, workbench_url=workbench_url)
         self.db_session.add(new_datasource)
         self.db_session.commit()
         return new_datasource.id
@@ -69,39 +74,39 @@ class DataSourceCRUD:
         '''
         self.db_session.query(Datasource).filter(Datasource.id == datasource_id).delete()
         self.db_session.commit()
+        return True
 
-    def update_datasource(self, datasource_id, name=None, database_name=None, server_ip=None, server_port=None,
-                          workbench_url=None, subid=None,
-                          creator=None, owner=None, current_process=None, last_modifier=None, data_file_format=None,
-                          datasource_type=None, param1=None, password=None, username=None, description=None):
+    def update_datasource(self, datasource_id, name=None, subid=None, creator=None, owner=None, current_process=None,
+                          last_modifier=None, data_file_format=None, database_name=None, datasource_type=None,
+                          description=None, folder_depth=None, param1=None, password=None, server_ip=None,
+                          server_port=None, username=None, workbench_url=None):
         """
 
         :param datasource_id:
         :param name:
-        :param database_name:
-        :param server_ip:
-        :param server_port:
-        :param workbench_url:
         :param subid:
         :param creator:
         :param owner:
         :param current_process:
         :param last_modifier:
         :param data_file_format:
+        :param database_name:
         :param datasource_type:
+        :param description:
+        :param folder_depth:
         :param param1:
         :param password:
+        :param server_ip:
+        :param server_port:
         :param username:
-        :param description:
+        :param workbench_url:
         :return:
         """
         pending = self.db_session.query(Datasource).get(datasource_id)
-        if datasource_id is None:
-            logger.error('datasource_id is needed')
-            raise PARAM_LACK
 
-        args_dict = locals().pop('datasource_id')
-        auto_update(pending, args_dict)
+        args_dict = locals()
+        check_list = ['datasource_id']
+        auto_update(pending, args_dict, check_list)
         """
         if subid is not None:
             pending.subid = subid
@@ -140,11 +145,3 @@ class DataSourceCRUD:
         pending.update_time = datetime.now()
         self.db_session.commit()
         return pending
-
-
-def test():
-    cruder = DataSourceCRUD(build_test_session(test_config))
-    cruder.add_datasource(name="test_datasource", database_name='/')
-
-
-test()

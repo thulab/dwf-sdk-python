@@ -30,12 +30,13 @@ class Datasource(Base):
     name = Column(String, unique=True, nullable=False, name='plt_dataSourceName')
     database_name = Column(String, name='plt_databaseName')
     data_file_format = Column(String, name='plt_dataFileFormat')
-    datasource_type = Column(String, nullable=False, name='plt_dataSourceType')
+    datasource_type = Column(String, name='plt_dataSourceType')
     description = Column(String, name='plt_description')
+    folder_depth = Column(String, name='plt_folderDepth')
     param1 = Column(String, name='plt_param1')
     password = Column(String, name='plt_password')
-    server_ip = Column(String, nullable=False, name='plt_serverIp')
-    server_port = Column(String, nullable=False, name='plt_serverPort')
+    server_ip = Column(String, name='plt_serverIp')
+    server_port = Column(String, name='plt_serverPort')
     username = Column(String, name='plt_userName')
     workbench_url = Column(String, name='plt_workbenchUrl')
 
@@ -55,15 +56,13 @@ class Dataset(Base):
     create_time = Column(DateTime, nullable=False, name='plt_createTime')
     update_time = Column(DateTime, name='plt_lastModifyTime')
 
-    description = Column(String, name='plt_description')
-
     name = Column(String, unique=True, nullable=False, name='plt_dataSetName')
     data_file_format = Column(String, name='plt_dataFileFormat')
     datasource_id = Column(String, nullable=False, name='plt_dataSourceId')
     default_filter_string = Column(String, name='plt_defaultFilterString')
-    filter = Column(String, nullable=False, name='plt_filterString')
-    folder_depth = Column(String, name='plt_folderDepth')
-    patterns = Column(String, nullable=False, name='plt_dataPattern4Learning')
+    description = Column(String, name='plt_description')
+    filter = Column(String, name='plt_filterString')
+    patterns = Column(String, name='plt_dataPattern4Learning')
     target_entity_class = Column(String, name='plt_targetEntityClass')
 
     def __repr__(self):
