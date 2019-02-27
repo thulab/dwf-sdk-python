@@ -16,53 +16,57 @@ Base = declarative_base()
 
 
 class Datasource(Base):
-    __tablename__ = 'datasource'
+    __tablename__ = 'plt_cus_datasource'
 
-    id = Column(String, primary_key=True)
-    create_time = Column(DateTime, nullable=False)
-    update_time = Column(DateTime)
-    name = Column(String, unique=True, nullable=False)
-    hostname = Column(String, nullable=False)
-    port = Column(String, nullable=False)
-    username = Column(String)
-    password = Column(String)
-    datasource_type = Column(String, nullable=False)
-    view_metadata_port = Column(String)
-    description = Column(String)
+    id = Column(String, primary_key=True, name='plt_oid')
+    subid = Column(String, name='plt_id')
+    creator = Column(String, name='plt_creator')
+    owner = Column(String, name='plt_owner')
+    current_process = Column(String, name='plt_currentProcess')
+    last_modifier = Column(String, name='plt_lastModifier')
+    create_time = Column(DateTime, nullable=False, name='plt_createTime')
+    update_time = Column(DateTime, name='plt_lastModifyTime')
+
+    name = Column(String, unique=True, nullable=False, name='plt_dataSourceName')
+    database_name = Column(String, name='plt_databaseName')
+    data_file_format = Column(String, name='plt_dataFileFormat')
+    datasource_type = Column(String, name='plt_dataSourceType')
+    description = Column(String, name='plt_description')
+    folder_depth = Column(String, name='plt_folderDepth')
+    param1 = Column(String, name='plt_param1')
+    password = Column(String, name='plt_password')
+    server_ip = Column(String, name='plt_serverIp')
+    server_port = Column(String, name='plt_serverPort')
+    username = Column(String, name='plt_userName')
+    workbench_url = Column(String, name='plt_workbenchUrl')
 
     def __repr__(self):
         return '<Datasource %r %r>' % (self.id, self.name)
 
 
 class Dataset(Base):
-    __tablename__ = 'dataset'
+    __tablename__ = 'plt_cus_dataset'
 
-    id = Column(String, primary_key=True)
-    name = Column(String, unique=True, nullable=False)
-    create_time = Column(DateTime, nullable=False)
-    update_time = Column(DateTime)
-    pattern_id = Column(String, ForeignKey('datapattern.id'), nullable=False)
-    pattern = relationship("DataPattern")
-    datasource_id = Column(String, ForeignKey('datasource.id'), nullable=False)
-    filter = Column(String, nullable=False)
-    description = Column(String)
+    id = Column(String, primary_key=True, name='plt_oid')
+    subid = Column(String, name='plt_id')
+    creator = Column(String, name='plt_creator')
+    owner = Column(String, name='plt_owner')
+    current_process = Column(String, name='plt_currentProcess')
+    last_modifier = Column(String, name='plt_lastModifier')
+    create_time = Column(DateTime, nullable=False, name='plt_createTime')
+    update_time = Column(DateTime, name='plt_lastModifyTime')
+
+    name = Column(String, unique=True, nullable=False, name='plt_dataSetName')
+    data_file_format = Column(String, name='plt_dataFileFormat')
+    datasource_id = Column(String, nullable=False, name='plt_dataSourceId')
+    default_filter_string = Column(String, name='plt_defaultFilterString')
+    description = Column(String, name='plt_description')
+    filter = Column(String, name='plt_filterString')
+    patterns = Column(String, name='plt_dataPattern4Learning')
+    target_entity_class = Column(String, name='plt_targetEntityClass')
 
     def __repr__(self):
         return '<Dataset %r %r>' % (self.id, self.name)
-
-
-class DataPattern(Base):
-    __tablename__ = 'datapattern'
-
-    id = Column(String, primary_key=True)
-    name = Column(String, unique=True, nullable=False)
-    data_type = Column(String)
-    organization = Column(String)
-    organization_parameter = Column(String)
-    semantic = Column(String)
-
-    def __repr__(self):
-        return '<DataPattern %r %r>' % (self.id, self.name)
 
 
 class Algorithm(Base):
