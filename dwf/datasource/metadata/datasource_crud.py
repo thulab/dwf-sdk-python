@@ -3,7 +3,6 @@ from dwf.ormmodels import Datasource, datetime
 from dwf.common.exception import *
 from dwf.common.log import logger
 from dwf.util.id import generate_primary_key
-from dwf.util.update import auto_update
 
 
 class DataSourceCRUD:
@@ -104,10 +103,6 @@ class DataSourceCRUD:
         """
         pending = self.db_session.query(Datasource).get(datasource_id)
 
-        args_dict = locals()
-        check_list = ['datasource_id']
-        auto_update(pending, args_dict, check_list)
-        """
         if subid is not None:
             pending.subid = subid
         if creator is not None:
@@ -140,7 +135,6 @@ class DataSourceCRUD:
             pending.username = username
         if description is not None:
             pending.description = description
-        """
 
         pending.update_time = datetime.now()
         self.db_session.commit()
