@@ -90,7 +90,7 @@ class DatasetCRUD:
                        name=None, datasource_id=None, data_file_format=None, default_filter_string=None,
                        description=None, filter=None, patterns=None, target_entity_class=None):
         """
-        
+
         :param dataset_id:
         :param subid:
         :param creator:
