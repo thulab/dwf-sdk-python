@@ -19,92 +19,69 @@ class AlgorithmCRUD:
     def __init__(self, db_session):
         self.db_session = db_session
 
-    def add_algorithm(self, name, main_file_name, hyperparameter_config, train_input_pattern, train_output_pattern,
-                      model_input_pattern, model_output_pattern, learning=1, package_id=None):
+    def add_algorithm(self, name, display_name, description, entry_name, hyperparameter_config, train_input_pattern, train_output_pattern,
+                      model_input_pattern, model_output_pattern, runtime, learning=True, package_id=None):
         #    NO.A301
         #	     Add an algorithm into the metadata DB.
         #    Args:
         #        name - name of algorithm
-        #        main_file_name - name of main file in the package
+        #        display_name - display name of algorithm
+        #        discription - discription of algorithm
+        #        entry_name - name of entry in the package
         #        hyperparameter_config - hyperparameter config
         #        train_input_pattern - [train_input_pattern_id1, train_input_pattern_id2 ...]
         #        train_output_pattern - [train_output_pattern_id1, train_output_pattern_id2 ...]
         #        model_input_pattern - [model_input_pattern_id1, model_input_pattern_id2 ...]
         #        model_output_pattern - [model_output_pattern_id1, model_output_pattern_id2 ...]
-        #        example_model_id - id of example model
+        #        runtime - running environment eg. xlearn.pytorch/ xlearn.tensorflow
         #        learning - whether it is a learning algorithm, 0/1
         #        package_id - id of package
         #    Returns:
         #	     Algorithm id
         #    Exceptions:
         #
+        oid = generate_primary_key_without_prefix()
         id = generate_primary_key('ALGO')
         create_time = datetime.now()
 
-        # 如果是学习类算法，增加model对象，获取example_model_id
-        # example_model的名字采用“***算法示例模型”
-        # example_model_id = ....
-        if learning == 1:
-            example_model_id = generate_primary_key('MODE')
-            example_model = Model(id=example_model_id,
-                                  name=str(name) + ' example model',
-                                  description=str(name) + ' example model',
-                                  create_time=datetime.now(),
-                                  model_path='xlearn/models')
-            self.db_session.add(example_model)
-
-            model_input_pattern_id_index = 1
-            for input_pattern_id in model_input_pattern:
-                model_input_id = generate_primary_key_without_prefix()
-                model_input_data_pattern = ModelInputDataPatterns(id=model_input_id,
-                                                                  model_id=example_model_id,
-                                                                  pattern_id=input_pattern_id,
-                                                                  index=model_input_pattern_id_index)
-                self.db_session.add(model_input_data_pattern)
-                model_input_pattern_id_index = model_input_pattern_id_index + 1
-
-            model_output_pattern_id_index = 1
-            for output_pattern_id in model_output_pattern:
-                model_output_id = generate_primary_key_without_prefix()
-                model_output_data_pattern = ModelOutputDataPatterns(id=model_output_id,
-                                                                    model_id=example_model_id,
-                                                                    pattern_id=output_pattern_id,
-                                                                    index=model_output_pattern_id_index)
-                self.db_session.add(model_output_data_pattern)
-                model_output_pattern_id_index = model_output_pattern_id_index + 1
+        if learning:
+            algorithm_type = 'Xlearn.Learning'
         else:
-            example_model_id = None
-
-        algorithm = Algorithm(id=id, create_time=create_time, name=name, main_file_name=main_file_name,
-                              hyperparameter_config=hyperparameter_config, example_model_id=example_model_id,
-                              learning=learning, available=1, package_id=package_id)
+            algorithm_type = 'Xlearn.Normal'
+        # TODO current_process,is builtin true or false,
+        algorithm = Algorithm(id = oid,
+                              subid = id,
+                              creator = 'admin',
+                              owner = 'admin',
+                              last_modifier = 'admin',
+                              create_time = create_time,
+                              name = name,
+                              display_name = display_name,
+                              algorithm_type = algorithm_type,
+                              description = description,
+                              alg_input_patterns = train_input_pattern,
+                              alg_output_patterns = train_output_pattern,
+                              parameters = hyperparameter_config,
+                              entry_name = entry_name,
+                              available = 1,
+                              isbuiltin = 0,
+                              isdeleted = 0,
+                              islearning = learning,
+                              model_input_patterns = model_input_pattern,
+                              model_output_patterns = model_output_pattern,
+                              package_id = package_id,
+                              prog_language = 'python',
+                              reference_count = 0,
+                              runtime = runtime
+                              )
         self.db_session.add(algorithm)
-
-        input_pattern_id_index = 1
-        for input_pattern_id in train_input_pattern:
-            algo_input_id = generate_primary_key_without_prefix()
-            algorithm_input_data_pattern = AlgorithmInputDataPatterns(id=algo_input_id, algorithm_id=id,
-                                                                      pattern_id=input_pattern_id,
-                                                                      index=input_pattern_id_index)
-            self.db_session.add(algorithm_input_data_pattern)
-            input_pattern_id_index = input_pattern_id_index + 1
-
-        output_pattern_id_index = 1
-        for output_pattern_id in train_output_pattern:
-            algo_output_id = generate_primary_key_without_prefix()
-            algorithm_output_data_pattern = AlgorithmOutputDataPatterns(id=algo_output_id, algorithm_id=id,
-                                                                        pattern_id=output_pattern_id,
-                                                                        index=output_pattern_id_index)
-            self.db_session.add(algorithm_output_data_pattern)
-            output_pattern_id_index = output_pattern_id_index + 1
-
         self.db_session.commit()
         return id
 
-    def update_algorithm(self, algorithm_id, name=None, main_file_name=None, hyperparameter_config=None,
-                         train_input_pattern=None,
-                         train_output_pattern=None, model_input_pattern=None, model_output_pattern=None,
-                         example_model_id=None, learning=None, package_id=None):
+    def update_algorithm(self, algorithm_id, name = None, display_name = None, description = None, entry_name = None,
+                         hyperparameter_config = None, train_input_pattern = None, train_output_pattern = None,
+                         model_input_pattern = None, model_output_pattern = None, runtime = None, learning =1,
+                         package_id=None):
         #    NO.A302
         #        Update a deep-learning algorithm into the metadata DB.
         #        Attention: It is DANGEROUS that the last last hyperparameter_config will be covered.
@@ -122,87 +99,52 @@ class AlgorithmCRUD:
         #    Returns:
         #        Algorithm id.
         #    Exceptions:
-        #        ADD_FAILURE - Fail to add this algorithm.
+        #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
+
         algorithm = self.db_session.query(Algorithm).get(algorithm_id)
+
+        if algorithm == None:
+            logger.error('Algorithm is not found')
+            raise NON_EXISTING_ALGORITHM
 
         if name is not None:
             algorithm.name = name
 
-        if main_file_name is not None:
-            algorithm.main_file_name = main_file_name
+        if display_name is not None:
+            algorithm.display_name = display_name
+
+        if description is not None:
+            algorithm.description = description
+
+        if entry_name is not None:
+            algorithm.entry_name = entry_name
 
         if hyperparameter_config is not None:
-            algorithm.hyperparameter_config = hyperparameter_config
+            algorithm.parameters = hyperparameter_config
 
         if train_input_pattern is not None:
-            self.db_session.query(AlgorithmInputDataPatterns).filter(
-                AlgorithmInputDataPatterns.algorithm_id == algorithm_id).delete()
-            input_pattern_id_index = 1
-            for input_pattern_id in train_input_pattern:
-                algo_input_id = generate_primary_key_without_prefix()
-                algorithm_input_data_pattern = AlgorithmInputDataPatterns(id=algo_input_id, algorithm_id=algorithm_id,
-                                                                          pattern_id=input_pattern_id,
-                                                                          index=input_pattern_id_index)
-                self.db_session.add(algorithm_input_data_pattern)
-                input_pattern_id_index = input_pattern_id_index + 1
+            algorithm.alg_input_patterns = train_input_pattern
 
         if train_output_pattern is not None:
-            self.db_session.query(AlgorithmOutputDataPatterns).filter(
-                AlgorithmOutputDataPatterns.algorithm_id == algorithm_id).delete()
-            output_pattern_id_index = 1
-            for output_pattern_id in train_output_pattern:
-                algo_output_id = generate_primary_key_without_prefix()
-                algorithm_output_data_pattern = AlgorithmOutputDataPatterns(id=algo_output_id,
-                                                                            algorithm_id=algorithm_id,
-                                                                            pattern_id=output_pattern_id,
-                                                                            index=output_pattern_id_index)
-                self.db_session.add(algorithm_output_data_pattern)
-                output_pattern_id_index = output_pattern_id_index + 1
+            algorithm.alg_output_patterns = train_output_pattern
 
-        if example_model_id is not None:
-            algorithm.example_model_id = example_model_id
+        if model_input_pattern is not None:
+            algorithm.model_input_patterns = model_input_pattern
+
+        if model_output_pattern is not None:
+            algorithm.model_output_patterns = model_output_pattern
+
+        if runtime is not None:
+            algorithm.runtime = runtime
 
         if learning is not None:
-            if learning == 1 and (algorithm.example_model_id is None) and (example_model_id is None):
-                # 修改非学习算法为算法时，未传入示例模型，则新建示例模型
-                example_model_id = generate_primary_key('MODE')
-                example_model = Model(id=example_model_id,
-                                      name=str(name) + ' example model',
-                                      description=str(name) + ' example model',
-                                      create_time=datetime.now(),
-                                      model_path='xlearn/models')
-                self.db_session.add(example_model)
-                model_input_pattern_id_index = 1
-                for input_pattern_id in model_input_pattern:
-                    model_input_id = generate_primary_key_without_prefix()
-                    model_input_data_pattern = ModelInputDataPatterns(id=model_input_id,
-                                                                      model_id=example_model_id,
-                                                                      pattern_id=input_pattern_id,
-                                                                      index=model_input_pattern_id_index)
-                    self.db_session.add(model_input_data_pattern)
-                    model_input_pattern_id_index = model_input_pattern_id_index + 1
-
-                model_output_pattern_id_index = 1
-                for output_pattern_id in model_output_pattern:
-                    model_output_id = generate_primary_key_without_prefix()
-                    model_output_data_pattern = ModelOutputDataPatterns(id=model_output_id,
-                                                                        model_id=example_model_id,
-                                                                        pattern_id=output_pattern_id,
-                                                                        index=model_output_pattern_id_index)
-                    self.db_session.add(model_output_data_pattern)
-                    model_output_pattern_id_index = model_output_pattern_id_index + 1
-                algorithm.example_model_id = example_model_id
-            elif learning == 0 and algorithm.example_model_id is not None:
-                self. db_session.query(Model).filter(Model.id == algorithm.example_model_id).delete()
-                algorithm.example_model_id = None
-
-            algorithm.learning = learning
+            algorithm.islearning = learning
 
         if package_id is not None:
             algorithm.package_id = package_id
 
         self.db_session.commit()
-        return id
+        return algorithm_id
 
     def query_algorithm(self, algorithm_id):
         #    NO.A312
@@ -213,7 +155,6 @@ class AlgorithmCRUD:
         #  	     algorithm_object
         #    Exceptions:
         #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
-        # TODO check 是否存在
         algorithm = self.db_session.query(Algorithm).get(algorithm_id)
         if algorithm == None:
             logger.error('Algorithm is not found')
@@ -244,12 +185,11 @@ class AlgorithmCRUD:
         #    Exceptions:
         #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
         #        DELETE_FAILURE - The algorithm cannot be deleted.
-        #  TODO check 是否存在
         algorithm = self.db_session.query(Algorithm).get(algorithm_id)
         if algorithm == None:
             logger.error('Algorithm is not found')
             raise NON_EXISTING_ALGORITHM
-        algorithm.deleted = 1
+        algorithm.isdeleted = 1
         self.db_session.commit()
 
     def recover_algorithm(self, algorithm_id):
@@ -263,12 +203,11 @@ class AlgorithmCRUD:
         #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
         #        NOT_DELETED - The algorithm is not deleted.
         #        RECOVER_FAILURE - The algorithm cannot be recovered.
-        #  TODO check 是否存在
         algorithm = self.db_session.query(Algorithm).get(algorithm_id)
         if algorithm is None:
             logger.error('Algorithm is not found')
             raise NON_EXISTING_ALGORITHM
-        algorithm.deleted = 0
+        algorithm.isdeleted = 0
         self.db_session.commit()
 
     def make_algorithm_unavailable(self, algorithm_id):
@@ -280,7 +219,12 @@ class AlgorithmCRUD:
         #        None.
         #    Exceptions:
         #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
-        return
+        algorithm = self.db_session.query(Algorithm).get(algorithm_id)
+        if algorithm is None:
+            logger.error('Algorithm is not found')
+            raise NON_EXISTING_ALGORITHM
+        algorithm.available = 0
+        self.db_session.commit()
 
     def clean_algorithm(self, algorithm_id):
         #    NO.A317
@@ -294,12 +238,12 @@ class AlgorithmCRUD:
         #    Exceptions:
         #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
         #        DELETE_FAILURE - The algorithm cannot be deleted.
-        #  TODO check 是否存在
         algorithm = self.db_session.query(Algorithm).get(algorithm_id)
         if algorithm is None:
             logger.error('Algorithm is not found')
             raise NON_EXISTING_ALGORITHM
         self.db_session.delete(algorithm)
+        #TODO DELETE_FAILURE
         self.db_session.commit()
 
     def query_algorithms_tree(self, root_id, depth):
@@ -560,3 +504,5 @@ class AlgorithmCRUD:
         #	 NO_EXISTING_MAIN_FILE - The main file doesn't exist.
         #	 RESOLVE_FAILURE - Fail to resolve hyperparamter from main file.
         return
+
+
