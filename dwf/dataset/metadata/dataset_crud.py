@@ -9,8 +9,9 @@
 #
 
 from dwf.ormmodels import Dataset, datetime
+from dwf.common.log import logger
+from dwf.common.exception import *
 from dwf.util.id import generate_primary_key
-from dwf.util.update import auto_update
 
 
 class DatasetCRUD:
@@ -107,11 +108,6 @@ class DatasetCRUD:
         """
         pending = self.db_session.query(Dataset).get(dataset_id)
 
-        args_dict = locals()
-        check_list = ['dataset_id']
-        auto_update(pending, args_dict, check_list)
-
-        """
         if dataset_id is None:
             logger.error('dataset_id is needed')
             raise PARAM_LACK
@@ -140,7 +136,6 @@ class DatasetCRUD:
             pending.patterns = patterns
         if target_entity_class is not None:
             pending.target_entity_class = target_entity_class
-        """
 
         pending.update_time = datetime.now()
         self.db_session.commit()
