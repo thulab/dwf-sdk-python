@@ -101,6 +101,7 @@ class DatasetCRUD:
         :param datasource_id:
         :param data_file_format:
         :param default_filter_string:
+        :param description:
         :param filter:
         :param patterns:
         :param target_entity_class:
@@ -130,6 +131,8 @@ class DatasetCRUD:
             pending.data_file_format = data_file_format
         if default_filter_string is not None:
             pending.default_filter_string = default_filter_string
+        if description is not None:
+            pending.description = description
         if filter is not None:
             pending.filter = filter
         if patterns is not None:
