@@ -104,7 +104,7 @@ class Algorithm(Base):
 
 
 class Package(Base):
-    __tablename__ = 'plt_cus_algorithmPackage'
+    __tablename__ = 'plt_alg_algorithmPackage'
 
     id = Column(String, primary_key=True, name='plt_oid')
     subid = Column(String, name='plt_id')
