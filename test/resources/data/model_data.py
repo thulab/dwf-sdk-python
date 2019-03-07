@@ -4,7 +4,7 @@ import uuid
 
 
 class ModelTestInstance:
-    def __init__(self, id, subid, creator, owner, current_process, last_modifier, create_time, update_ime, name,
+    def __init__(self, id, subid, creator, owner, current_process, last_modifier, create_time, update_ime, name,algorithm_id,
                  description, input_data_patterns, output_data_patterns, model_path, model_resource, usage):
         self.id = id
         self.subid = subid
@@ -16,6 +16,7 @@ class ModelTestInstance:
         self.update_ime = update_ime
         random_postfix = random.randint(1000, 9999)
         self.name = '%s_%s' % (name, random_postfix)
+        self.algorithm_id=algorithm_id
         self.description = description
         self.input_data_patterns = input_data_patterns
         self.output_data_patterns = output_data_patterns
@@ -34,6 +35,7 @@ test_model1 = ModelTestInstance(
     create_time=datetime.now(),
     update_ime=datetime.now(),
     name='test_model',
+    algorithm_id='12345678901234567890123456789012',
     description='test model description',
     input_data_patterns='[test_pattern1,test_pattern2]',
     output_data_patterns='[test_pattern3,test_pattern4]',

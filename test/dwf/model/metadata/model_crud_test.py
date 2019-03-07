@@ -33,6 +33,7 @@ class TestCRUD(unittest.TestCase):
         model_id = self.cruder.add_model(subid=model_instance.subid, creator=model_instance.creator,
                                          owner=model_instance.owner, current_process=model_instance.current_process,
                                          last_modifier=model_instance.last_modifier, name=model_instance.name,
+                                         algorithm_id=model_instance.algorithm_id,
                                          description=model_instance.description,
                                          input_data_patterns=model_instance.input_data_patterns,
                                          output_data_patterns=model_instance.output_data_patterns,
