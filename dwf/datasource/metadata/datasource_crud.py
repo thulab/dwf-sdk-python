@@ -37,7 +37,7 @@ class DataSourceCRUD:
             raise ILLEGAL_REPEATED_FILED
 
         id = generate_primary_key('DSOU')
-        create_time = datetime.now()
+        create_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
 
         if database_name is None:
             database_name = '/'
@@ -136,6 +136,6 @@ class DataSourceCRUD:
         if description is not None:
             pending.description = description
 
-        pending.update_time = datetime.now()
+        pending.update_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
         self.db_session.commit()
         return pending

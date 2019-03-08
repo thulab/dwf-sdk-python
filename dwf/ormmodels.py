@@ -14,8 +14,9 @@ from dwf.common.config import *
 
 Base = declarative_base()
 
+
 class Datasource(Base):
-    __tablename__ = 'plt_cus_datasource'
+    __tablename__ = 'plt_alg_datasource'
 
     id = Column(String, primary_key=True, name='plt_oid')
     subid = Column(String, name='plt_id')
@@ -44,7 +45,7 @@ class Datasource(Base):
 
 
 class Dataset(Base):
-    __tablename__ = 'plt_cus_dataset'
+    __tablename__ = 'plt_alg_dataset'
 
     id = Column(String, primary_key=True, name='plt_oid')
     subid = Column(String, name='plt_id')

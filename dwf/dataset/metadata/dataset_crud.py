@@ -36,7 +36,7 @@ class DatasetCRUD:
         '''
 
         id = generate_primary_key('DSET')
-        create_time = datetime.now()
+        create_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
 
         dataset = Dataset(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
                           last_modifier=last_modifier, create_time=create_time,
@@ -140,6 +140,6 @@ class DatasetCRUD:
         if target_entity_class is not None:
             pending.target_entity_class = target_entity_class
 
-        pending.update_time = datetime.now()
+        pending.update_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
         self.db_session.commit()
         return pending
