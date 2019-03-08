@@ -15,7 +15,7 @@ from dwf.common.config import *
 Base = declarative_base()
 
 class Datasource(Base):
-    __tablename__ = 'plt_alg_datasource'
+    __tablename__ = 'plt_cus_datasource'
 
     id = Column(String, primary_key=True, name='plt_oid')
     subid = Column(String, name='plt_id')
@@ -32,7 +32,7 @@ class Datasource(Base):
     datasource_type = Column(String, name='plt_datasourcetype')
     description = Column(String, name='plt_description')
     folder_depth = Column(String, name='plt_folderdepth')
-    paramone = Column(String, name='plt_paramone')
+    param1 = Column(String, name='plt_param1')
     password = Column(String, name='plt_password')
     server_ip = Column(String, name='plt_serverip')
     server_port = Column(String, name='plt_serverport')
@@ -44,7 +44,7 @@ class Datasource(Base):
 
 
 class Dataset(Base):
-    __tablename__ = 'plt_alg_dataset'
+    __tablename__ = 'plt_cus_dataset'
 
     id = Column(String, primary_key=True, name='plt_oid')
     subid = Column(String, name='plt_id')
@@ -104,7 +104,7 @@ class Algorithm(Base):
 
 
 class Package(Base):
-    __tablename__ = 'plt_alg_algorithmPackage'
+    __tablename__ = 'plt_cus_algorithmPackage'
 
     id = Column(String, primary_key=True, name='plt_oid')
     subid = Column(String, name='plt_id')
@@ -177,6 +177,5 @@ def build_test_session(test_config):
     return test_db_session
 
 
-runtime_db_session = build_session(deploy_config)
 if __name__ == '__main__':
     build_session(deploy_config)
