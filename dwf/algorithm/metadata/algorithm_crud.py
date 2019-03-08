@@ -20,7 +20,7 @@ class AlgorithmCRUD:
         self.db_session = db_session
 
     def add_algorithm(self, name, display_name, description, entry_name, hyperparameter_config, train_input_pattern, train_output_pattern,
-                      model_input_pattern, model_output_pattern, runtime, learning=True, package_id=None):
+                      model_input_pattern, model_output_pattern, runtime, learning=1, package_id=None):
         #    NO.A301
         #	     Add an algorithm into the metadata DB.
         #    Args:
@@ -76,7 +76,7 @@ class AlgorithmCRUD:
                               )
         self.db_session.add(algorithm)
         self.db_session.commit()
-        return id
+        return oid
 
     def update_algorithm(self, algorithm_id, name = None, display_name = None, description = None, entry_name = None,
                          hyperparameter_config = None, train_input_pattern = None, train_output_pattern = None,

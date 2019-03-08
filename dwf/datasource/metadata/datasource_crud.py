@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 from dwf.ormmodels import Datasource, datetime
+from dwf.common.exception import *
+from dwf.common.log import logger
 from dwf.util.id import generate_primary_key
 
 
@@ -9,7 +11,7 @@ class DataSourceCRUD:
 
     def add_datasource(self, name, subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
                        data_file_format=None, database_name=None, datasource_type='LOCAL_FS', description=None,
-                       folder_depth=None, paramone=None, password=None, server_ip=None, server_port=None, username=None,
+                       folder_depth=None, param1=None, password=None, server_ip=None, server_port=None, username=None,
                        workbench_url=None):
         '''
             Register a datasource in the metadata DB of DWF.
@@ -29,12 +31,10 @@ class DataSourceCRUD:
                 The ID of datasource.
 
         '''
-        """
         datasources = self.db_session.query(Datasource).filter(Datasource.name == name)
         if datasources.count() > 0:
             logger.error("The name of datasource already exists." % name)
             raise ILLEGAL_REPEATED_FILED
-        """
 
         id = generate_primary_key('DSOU')
         create_time = datetime.now()
@@ -48,7 +48,7 @@ class DataSourceCRUD:
                                     last_modifier=last_modifier, create_time=create_time, name=name,
                                     database_name=database_name, data_file_format=data_file_format,
                                     datasource_type=datasource_type, description=description, folder_depth=folder_depth,
-                                    paramone=paramone, password=password, server_ip=server_ip, server_port=server_port,
+                                    param1=param1, password=password, server_ip=server_ip, server_port=server_port,
                                     username=username, workbench_url=workbench_url)
         self.db_session.add(new_datasource)
         self.db_session.commit()
@@ -77,7 +77,7 @@ class DataSourceCRUD:
 
     def update_datasource(self, datasource_id, name=None, subid=None, creator=None, owner=None, current_process=None,
                           last_modifier=None, data_file_format=None, database_name=None, datasource_type=None,
-                          description=None, folder_depth=None, paramone=None, password=None, server_ip=None,
+                          description=None, folder_depth=None, param1=None, password=None, server_ip=None,
                           server_port=None, username=None, workbench_url=None):
         """
 
@@ -93,7 +93,7 @@ class DataSourceCRUD:
         :param datasource_type:
         :param description:
         :param folder_depth:
-        :param paramone:
+        :param param1:
         :param password:
         :param server_ip:
         :param server_port:
@@ -127,8 +127,8 @@ class DataSourceCRUD:
             pending.data_file_format = data_file_format
         if datasource_type is not None:
             pending.datasource_type = datasource_type
-        if paramone is not None:
-            pending.paramone = paramone
+        if param1 is not None:
+            pending.param1 = param1
         if password is not None:
             pending.password = password
         if username is not None:
