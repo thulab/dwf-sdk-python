@@ -61,7 +61,7 @@ class DatasetCRUD:
         dataset = self.db_session.query(Dataset).get(dataset_id)
         return dataset
 
-    def get_dataset_all(self):
+    def get_all_dataset(self):
         '''
             Get all datasets from the metadata DB of DWF.
 

@@ -1,7 +1,5 @@
 # -*- coding:utf-8 -*-
 from dwf.ormmodels import Datasource, datetime
-from dwf.common.exception import *
-from dwf.common.log import logger
 from dwf.util.id import generate_primary_key
 
 
@@ -11,7 +9,7 @@ class DataSourceCRUD:
 
     def add_datasource(self, name, subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
                        data_file_format=None, database_name=None, datasource_type='LOCAL_FS', description=None,
-                       folder_depth=None, param1=None, password=None, server_ip=None, server_port=None, username=None,
+                       folder_depth=None, paramone=None, password=None, server_ip=None, server_port=None, username=None,
                        workbench_url=None):
         '''
             Register a datasource in the metadata DB of DWF.
@@ -31,11 +29,6 @@ class DataSourceCRUD:
                 The ID of datasource.
 
         '''
-        datasources = self.db_session.query(Datasource).filter(Datasource.name == name)
-        if datasources.count() > 0:
-            logger.error("The name of datasource already exists." % name)
-            raise ILLEGAL_REPEATED_FILED
-
         id = generate_primary_key('DSOU')
         create_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
 
@@ -48,7 +41,7 @@ class DataSourceCRUD:
                                     last_modifier=last_modifier, create_time=create_time, name=name,
                                     database_name=database_name, data_file_format=data_file_format,
                                     datasource_type=datasource_type, description=description, folder_depth=folder_depth,
-                                    param1=param1, password=password, server_ip=server_ip, server_port=server_port,
+                                    paramone=paramone, password=password, server_ip=server_ip, server_port=server_port,
                                     username=username, workbench_url=workbench_url)
         self.db_session.add(new_datasource)
         self.db_session.commit()
@@ -65,6 +58,17 @@ class DataSourceCRUD:
         datasource = self.db_session.query(Datasource).get(datasource_id)
         return datasource
 
+    def get_all_datasource(self):
+        '''
+            Get all datasources from the metadata DB of DWF.
+            Args:
+
+            Returns:
+                The list of datasources.
+        '''
+        datasource_list = self.db_session.query(Datasource).all()
+        return datasource_list
+
     def delete_datasource(self, datasource_id):
         '''
             Delete a datasource by ID from the metadata DB of DWF.
@@ -77,7 +81,7 @@ class DataSourceCRUD:
 
     def update_datasource(self, datasource_id, name=None, subid=None, creator=None, owner=None, current_process=None,
                           last_modifier=None, data_file_format=None, database_name=None, datasource_type=None,
-                          description=None, folder_depth=None, param1=None, password=None, server_ip=None,
+                          description=None, folder_depth=None, paramone=None, password=None, server_ip=None,
                           server_port=None, username=None, workbench_url=None):
         """
 
@@ -93,7 +97,7 @@ class DataSourceCRUD:
         :param datasource_type:
         :param description:
         :param folder_depth:
-        :param param1:
+        :param paramone:
         :param password:
         :param server_ip:
         :param server_port:
@@ -127,8 +131,10 @@ class DataSourceCRUD:
             pending.data_file_format = data_file_format
         if datasource_type is not None:
             pending.datasource_type = datasource_type
-        if param1 is not None:
-            pending.param1 = param1
+        if folder_depth is not None:
+            folder_depth = folder_depth
+        if paramone is not None:
+            pending.paramone = paramone
         if password is not None:
             pending.password = password
         if username is not None:

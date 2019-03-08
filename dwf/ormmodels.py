@@ -33,7 +33,7 @@ class Datasource(Base):
     datasource_type = Column(String, name='plt_datasourcetype')
     description = Column(String, name='plt_description')
     folder_depth = Column(String, name='plt_folderdepth')
-    param1 = Column(String, name='plt_param1')
+    paramone = Column(String, name='plt_paramone')
     password = Column(String, name='plt_password')
     server_ip = Column(String, name='plt_serverip')
     server_port = Column(String, name='plt_serverport')
@@ -105,7 +105,7 @@ class Algorithm(Base):
 
 
 class Package(Base):
-    __tablename__ = 'plt_cus_algorithmPackage'
+    __tablename__ = 'plt_alg_algorithmPackage'
 
     id = Column(String, primary_key=True, name='plt_oid')
     subid = Column(String, name='plt_id')
