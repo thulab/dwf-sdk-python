@@ -82,7 +82,8 @@ class DatasetCRUD:
                 dataset_id - The ID of dataset.
 
         '''
-        self.db_session.query(Dataset).filter(Dataset.id == dataset_id).delete()
+        pending = self.db_session.query(Dataset).get(dataset_id)
+        self.db_session.delete(pending)
         self.db_session.commit()
         return True
 

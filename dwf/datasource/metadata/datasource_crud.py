@@ -75,7 +75,8 @@ class DataSourceCRUD:
             Args:
                 datasource_id - The ID of datasource.
         '''
-        self.db_session.query(Datasource).filter(Datasource.id == datasource_id).delete()
+        pending = self.db_session.query(Datasource).get(datasource_id)
+        self.db_session.delete(pending)
         self.db_session.commit()
         return True
 
