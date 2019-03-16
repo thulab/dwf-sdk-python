@@ -14,6 +14,7 @@ from dwf.common.config import *
 
 Base = declarative_base()
 
+
 class Datasource(Base):
     __tablename__ = 'plt_alg_datasource'
 
@@ -30,7 +31,7 @@ class Datasource(Base):
     database_name = Column(String, name='plt_databasename')
     data_file_format = Column(String, name='plt_datafileformat')
     datasource_type = Column(String, name='plt_datasourcetype')
-    description = Column(String, name='plt_descriptionext')
+    description = Column(String, name='plt_description')
     folder_depth = Column(String, name='plt_folderdepth')
     paramone = Column(String, name='plt_paramone')
     password = Column(String, name='plt_password')
@@ -59,7 +60,7 @@ class Dataset(Base):
     data_file_format = Column(String, name='plt_datafileformat')
     datasource_id = Column(String, nullable=False, name='plt_datasourceid')
     default_filter_string = Column(String, name='plt_defaultfilterstring')
-    description = Column(String, name='plt_descriptionext')
+    description = Column(String, name='plt_description')
     filter = Column(String, name='plt_filterstring')
     patterns = Column(String, name='plt_datapattern4learning')
     target_entity_class = Column(String, name='plt_targetentityclass')
@@ -177,6 +178,5 @@ def build_test_session(test_config):
     return test_db_session
 
 
-runtime_db_session = build_session(deploy_config)
 if __name__ == '__main__':
     build_session(deploy_config)

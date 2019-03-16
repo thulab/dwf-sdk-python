@@ -29,13 +29,6 @@ class DataSourceCRUD:
                 The ID of datasource.
 
         '''
-        """
-        datasources = self.db_session.query(Datasource).filter(Datasource.name == name)
-        if datasources.count() > 0:
-            logger.error("The name of datasource already exists." % name)
-            raise ILLEGAL_REPEATED_FILED
-        """
-
         id = generate_primary_key('DSOU')
         create_time = datetime.now()
 
@@ -65,13 +58,25 @@ class DataSourceCRUD:
         datasource = self.db_session.query(Datasource).get(datasource_id)
         return datasource
 
+    def get_all_datasource(self):
+        '''
+            Get all datasources from the metadata DB of DWF.
+            Args:
+
+            Returns:
+                The list of datasources.
+        '''
+        datasource_list = self.db_session.query(Datasource).all()
+        return datasource_list
+
     def delete_datasource(self, datasource_id):
         '''
             Delete a datasource by ID from the metadata DB of DWF.
             Args:
                 datasource_id - The ID of datasource.
         '''
-        self.db_session.query(Datasource).filter(Datasource.id == datasource_id).delete()
+        pending = self.db_session.query(Datasource).get(datasource_id)
+        self.db_session.delete(pending)
         self.db_session.commit()
         return True
 
@@ -127,6 +132,8 @@ class DataSourceCRUD:
             pending.data_file_format = data_file_format
         if datasource_type is not None:
             pending.datasource_type = datasource_type
+        if folder_depth is not None:
+            pending.folder_depth = folder_depth
         if paramone is not None:
             pending.paramone = paramone
         if password is not None:

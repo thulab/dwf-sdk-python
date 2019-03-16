@@ -39,8 +39,8 @@ class DatasetCRUD:
         create_time = datetime.now()
 
         dataset = Dataset(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
-                          last_modifier=last_modifier, create_time=create_time,
-                          name=name, data_file_format=data_file_format, datasource_id=datasource_id,
+                          last_modifier=last_modifier, create_time=create_time, name=name,
+                          data_file_format=data_file_format, datasource_id=datasource_id,
                           default_filter_string=default_filter_string, description=description, filter=filter,
                           patterns=patterns, target_entity_class=target_entity_class)
         self.db_session.add(dataset)
@@ -61,7 +61,7 @@ class DatasetCRUD:
         dataset = self.db_session.query(Dataset).get(dataset_id)
         return dataset
 
-    def get_dataset_all(self):
+    def get_all_dataset(self):
         '''
             Get all datasets from the metadata DB of DWF.
 
@@ -82,7 +82,8 @@ class DatasetCRUD:
                 dataset_id - The ID of dataset.
 
         '''
-        self.db_session.query(Dataset).filter(Dataset.id == dataset_id).delete()
+        pending = self.db_session.query(Dataset).get(dataset_id)
+        self.db_session.delete(pending)
         self.db_session.commit()
         return True
 
