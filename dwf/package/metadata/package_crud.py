@@ -34,7 +34,9 @@ class PackageCRUD:
 
         id = generate_primary_key('PACK')
         create_time = datetime.now()
-        package = Package(id=id, create_time=create_time, name=name, package_source=package_source,
+        package = Package(id=id, subid=id, creator='admin', owner='admin',
+                          last_modifier='admin', create_time=create_time,
+                          name=name, package_source=package_source,
                           package_path=package_path, description=description)
         self.db_session.add(package)
         self.db_session.commit()
@@ -72,29 +74,40 @@ class PackageCRUD:
             raise PARAM_LACK
 
         if name is not None:
-            pending.plt_name = name
+            pending.name = name
         if package_source is not None:
             pending.package_source = package_source
         if package_path is not None:
             pending.package_path = package_path
         if description is not None:
-            pending.update_time = description
+            pending.description = description
 
-        pending.create_time = datetime.now()
+        pending.last_modifier = 'admin'
+        pending.update_time = datetime.now()
         self.db_session.commit()
         return pending
 
-    def query_package(self, package_id):
+    def get_package(self, package_id):
         #    NO.A322
-        #        Query package configs.
+        #	     Get package information.
         #    Args：
-        #        package_id: The id of package.
+        #	     package_id - The ID of package.
         #    Returns：
-        #        {
-        #            package_name:"***",
-        #            deployment_path:"***",
-        #            upload_source:"***",
-        #            requirement_list:"***"
-        #        }
+        #  	     package_object
+        #    Exceptions:
+        #        NON_EXISTING_PACKAGE - The given package_id does not exist.
         package = self.db_session.query(Package).get(package_id)
+        if package is None:
+            logger.error('Package is not found')
+            raise NON_EXISTING_PACKAGE
         return package
+
+    def get_all_packages(self):
+        #    NO.A323
+        #        Get all packages' information.
+        #    Args：
+        #        None
+        #    Returns：
+        #        package_info list
+        packages = self.db_session.query(Package).all()
+        return packages
