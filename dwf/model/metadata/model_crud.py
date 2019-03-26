@@ -11,7 +11,7 @@
 from dwf.ormmodels import Model, datetime
 from dwf.common.log import logger
 from dwf.common.exception import *
-import uuid
+from dwf.util.id import generate_primary_key
 
 
 class ModelCRUD:
@@ -33,7 +33,7 @@ class ModelCRUD:
                   current_process=None, last_modifier=None, description=None, model_path=None, model_resource=None,
                   usage=None):
         # add a model
-        id = str(uuid.uuid1()).replace('-', '')
+        id = generate_primary_key('MODE')
         create_time = datetime.now()
 
         model = Model(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,

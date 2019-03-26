@@ -30,7 +30,7 @@ class DataSourceCRUD:
 
         '''
         id = generate_primary_key('DSOU')
-        create_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
+        create_time = datetime.now()
 
         if database_name is None:
             database_name = '/'
@@ -133,7 +133,7 @@ class DataSourceCRUD:
         if datasource_type is not None:
             pending.datasource_type = datasource_type
         if folder_depth is not None:
-            folder_depth = folder_depth
+            pending.folder_depth = folder_depth
         if paramone is not None:
             pending.paramone = paramone
         if password is not None:
@@ -143,6 +143,6 @@ class DataSourceCRUD:
         if description is not None:
             pending.description = description
 
-        pending.update_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
+        pending.update_time = datetime.now()
         self.db_session.commit()
         return pending

@@ -34,7 +34,9 @@ DATABASE_CONN_FAIL = DWFException(3001, '数据库连接错误')
 NUM_RESULT_MISMATCH = DWFException(3002, '查询记录结果数不符合预期')
 ILLEGAL_REPEATED_FILED = DWFException(3003, '字段不可重复')
 NON_EXISTING_ALGORITHM = DWFException(3004, '算法不存在')
-NON_EXISTING_DATA_PATTERN = DWFException(3004, '数据模式不存在')
+NON_EXISTING_DATA_PATTERN = DWFException(3005, '数据模式不存在')
+NON_EXISTING_PACKAGE = DWFException(3006, '包不存在')
+
 '''
 Exceptions for Files
 '''

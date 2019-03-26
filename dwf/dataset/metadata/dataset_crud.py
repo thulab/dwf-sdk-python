@@ -36,11 +36,11 @@ class DatasetCRUD:
         '''
 
         id = generate_primary_key('DSET')
-        create_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
+        create_time = datetime.now()
 
         dataset = Dataset(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
-                          last_modifier=last_modifier, create_time=create_time,
-                          name=name, data_file_format=data_file_format, datasource_id=datasource_id,
+                          last_modifier=last_modifier, create_time=create_time, name=name,
+                          data_file_format=data_file_format, datasource_id=datasource_id,
                           default_filter_string=default_filter_string, description=description, filter=filter,
                           patterns=patterns, target_entity_class=target_entity_class)
         self.db_session.add(dataset)
@@ -141,6 +141,6 @@ class DatasetCRUD:
         if target_entity_class is not None:
             pending.target_entity_class = target_entity_class
 
-        pending.update_time = (datetime.now()).strftime('%Y-%m-%d %H:%M:%S')
+        pending.update_time = datetime.now()
         self.db_session.commit()
         return pending
