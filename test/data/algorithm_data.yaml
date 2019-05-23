@@ -1,0 +1,17 @@
+add :
+    name : 'test_algorithm'
+    display_name : 'test_algorithm'
+    description : 'test_algorithm'
+    entry_name : 'admin'
+    algorithm_type : 'admin'
+    hyperparameter_config : ''
+    available : ''
+    train_input_pattern : ''
+    train_output_pattern : ''
+    model_input_pattern : ''
+    model_output_pattern : ''
+    runtime : ''
+    learning : ''
+    package_id : ''
+update :
+  description : 'update_test_algorithm'

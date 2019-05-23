@@ -1,0 +1,17 @@
+add :
+    subid : '001'
+    creator : 'admin'
+    owner : 'admin'
+    current_process : 'process1'
+    last_modifier : 'admin'
+    name : 'test_model'
+    algorithm_id : '12345678901234567890123456789012'
+    description : 'test model description'
+    input_data_patterns : '[test_pattern1,test_pattern2]'
+    output_data_patterns : '[test_pattern3,test_pattern4]'
+    model_path : 'test model path'
+    model_resource : 'test model resource'
+    usage : 'test model usage'
+
+update :
+  usage : 'test update model usage'

@@ -1,0 +1,16 @@
+add :
+    name : 'test_dataset1'
+    datasource_id : 'datasource'
+    subid : '001'
+    creator : 'admin'
+    owner : 'admin'
+    current_process : ''
+    last_modifier : ''
+    data_file_format : ''
+    default_filter_string : ''
+    description : 'test_dataset'
+    filter : ''
+    patterns : ''
+    target_entity_class : ''
+update :
+  description : 'update_test_dataset'

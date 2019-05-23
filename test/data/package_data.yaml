@@ -1,0 +1,8 @@
+add :
+    name : 'test_package_name'
+    package_source : 'test_package_source'
+    package_path : 'test_package_path'
+    description : 'test_description'
+
+update :
+    name : 'test_package_name_update'
