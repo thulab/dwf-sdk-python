@@ -2,6 +2,7 @@
 import unittest
 import ddt
 from test.util.handle_yaml import HandleYaml
+from test.util import util
 
 from dwf.common.config import test_config
 from dwf.model.metadata.model_crud import ModelCRUD
@@ -27,8 +28,8 @@ class TestModel(unittest.TestCase):
     @ddt.data(params)
     def test_add_model(self,params):
         model = params["add"]
-
-        model_id = self.cruder.add_model(subid=model["subid"], creator=model["creator"],
+        test_name = util.get_name(model["name"])
+        model_id = self.cruder.add_model(subid=test_name, creator=model["creator"],
                                          owner=model["owner"], current_process=model["current_process"],
                                          last_modifier=model["last_modifier"], name=model["name"],
                                          algorithm_id=model["algorithm_id"],
@@ -39,7 +40,7 @@ class TestModel(unittest.TestCase):
                                          model_resource=model["model_resource"], usage=model["usage"])
         model_db_instance = self.test_db_session.query(Model).get(model_id)
 
-        self.assertEqual(model_db_instance.subid, model["subid"])
+        self.assertEqual(model_db_instance.subid, test_name)
         self.assertEqual(model_db_instance.creator, model["creator"])
         self.assertEqual(model_db_instance.owner, model["owner"])
         self.assertEqual(model_db_instance.current_process, model["current_process"])
@@ -83,7 +84,8 @@ class TestModel(unittest.TestCase):
     @ddt.data(params)
     def test_get_model(self, params):
         model = params["add"]
-        model_id = self.cruder.add_model(subid=model["subid"], creator=model["creator"],
+        test_name = util.get_name(model["name"])
+        model_id = self.cruder.add_model(subid=test_name, creator=model["creator"],
                                          owner=model["owner"], current_process=model["current_process"],
                                          last_modifier=model["last_modifier"], name=model["name"],
                                          algorithm_id=model["algorithm_id"],
@@ -96,7 +98,7 @@ class TestModel(unittest.TestCase):
         model_crud = self.cruder.get_model(model_id)
 
         # 断言
-        self.assertEqual(model_crud.subid, model["subid"])
+        self.assertEqual(model_crud.subid, test_name)
         self.assertEqual(model_crud.creator, model["creator"])
         self.assertEqual(model_crud.owner, model["owner"])
         self.assertEqual(model_crud.current_process, model["current_process"])
@@ -115,7 +117,8 @@ class TestModel(unittest.TestCase):
     @ddt.data(params)
     def test_get_all_model(self, params):
         model = params["add"]
-        model_id = self.cruder.add_model(subid=model["subid"], creator=model["creator"],
+        test_name = util.get_name(model["name"])
+        model_id = self.cruder.add_model(subid=test_name, creator=model["creator"],
                                          owner=model["owner"], current_process=model["current_process"],
                                          last_modifier=model["last_modifier"], name=model["name"],
                                          algorithm_id=model["algorithm_id"],
@@ -136,7 +139,8 @@ class TestModel(unittest.TestCase):
     @ddt.data(params)
     def test_delete_model(self, params):
         model = params["add"]
-        model_id = self.cruder.add_model(subid=model["subid"], creator=model["creator"],
+        test_name = util.get_name(model["name"])
+        model_id = self.cruder.add_model(subid=test_name, creator=model["creator"],
                                          owner=model["owner"], current_process=model["current_process"],
                                          last_modifier=model["last_modifier"], name=model["name"],
                                          algorithm_id=model["algorithm_id"],
