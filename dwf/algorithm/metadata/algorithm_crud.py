@@ -49,6 +49,11 @@ class AlgorithmCRUD:
         if available is None:
             available = 1
 
+        exist_algorithm = self.db_session.query(Algorithm).filter(Algorithm.name == name)
+
+        if exist_algorithm is not None:
+            raise ALGORITHM_NAME_EXISTED
+
         algorithm = Algorithm(id=id, subid=id, creator='admin', owner='admin', last_modifier='admin',
                               create_time=create_time, name=name, display_name=display_name,
                               algorithm_type=algorithm_type, description=description,
