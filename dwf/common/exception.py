@@ -47,3 +47,8 @@ FILE_FORMAT_ERROR = DWFException(4002, '文件格式不符合预期')
 Exceptions for Development
 '''
 NOT_IMPLEMENTED = DWFException(5001, '方法未实现')
+
+'''
+Exceptions for Data Pattern
+'''
+DATA_PATTERN_MISMATCH = DWFException(6001, '数据模式不匹配')
