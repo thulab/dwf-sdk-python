@@ -86,7 +86,6 @@ class UserCRUD:
         :return: 数据集元信息
         """
 
-        print(user_id)
         user = self.db_session.query(User).get(user_id)
 
         return user
