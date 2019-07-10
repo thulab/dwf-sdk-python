@@ -101,11 +101,22 @@ class UserCRUD:
 
         return user_list
 
+    def get_user_by_name(self, name):
+        """
+
+        :param name:
+        :return:
+        """
+
+        user_list = self.db_session.query(User).filter(User.name == name).all()
+
+        return user_list
+
     def delete_user(self, user_id):
         """
         删除数据集元信息
 
-        :param dataset_id: 数据集ID
+        :param user_id: 用户ID
         :return: 无
         """
 
@@ -135,7 +146,6 @@ class UserCRUD:
         :param creator:
         :param subid:
         :param last_modifier:
-        :param last_modify_time:
         :param comment:
         :param password:
         :param display_name:
@@ -146,7 +156,7 @@ class UserCRUD:
         """
 
         if user_id is None:
-            logger.error('缺少数据集ID')
+            logger.error('缺少用户ID')
             raise PARAM_LACK
 
         user = self.db_session.query(User).get(user_id)

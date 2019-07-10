@@ -27,7 +27,7 @@ class User(Base):
     last_modifier = Column(String, name='plt_lastmodifier')
     last_modify_time = Column(DateTime, name='plt_lastmodifytime')
     comment = Column(String, name='plt_comment')
-    name = Column(String, nullable=False, name='plt_name')
+    name = Column(String, nullable=False, unique=True, name='plt_name')
     password = Column(String, name='plt_password')
     create_time = Column(DateTime, nullable=False, name='plt_createtime')
     display_name = Column(String, name='plt_displayname')
