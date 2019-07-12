@@ -6,13 +6,37 @@
 #
 
 from datetime import datetime
-from sqlalchemy import Column, String, create_engine, Integer, DateTime, Boolean, ForeignKey, Table, Interval
-from sqlalchemy.orm import sessionmaker, relationship
+
+from sqlalchemy import Column, String, create_engine, Integer, DateTime, Boolean, Text
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
+
 from dwf.common.config import *
 
 Base = declarative_base()
+
+
+class User(Base):
+    __tablename__ = 'plg_org_user'
+
+    id = Column(Text, primary_key=True, nullable=False, name='plt_oid')
+    date = Column(DateTime, name='plt_date')
+    creator = Column(String, name='plt_creator')
+    subid = Column(String, name='plt_id')
+    last_modifier = Column(String, name='plt_lastmodifier')
+    last_modify_time = Column(DateTime, name='plt_lastmodifytime')
+    comment = Column(String, name='plt_comment')
+    name = Column(String, nullable=False, unique=True, name='plt_name')
+    password = Column(String, name='plt_password')
+    create_time = Column(DateTime, nullable=False, name='plt_createtime')
+    display_name = Column(String, name='plt_displayname')
+    email = Column(String, name='plt_email')
+    expiredtime = Column(DateTime, name='plt_expiredtime')
+    isfrozen = Column(Boolean, default=False, name='plt_isfrozen')
+
+    def __repr__(self):
+        return '<User %r %r>' % (self.id, self.name)
 
 
 class Datasource(Base):
@@ -177,6 +201,8 @@ def build_test_session(test_config):
     test_db_session = TEST_Session()
     return test_db_session
 
+
+db_session = build_session(deploy_config)
 
 if __name__ == '__main__':
     build_session(deploy_config)

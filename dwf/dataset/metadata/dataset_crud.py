@@ -8,35 +8,48 @@
 # Version 0.1
 #
 
-from dwf.ormmodels import Dataset, datetime
-from dwf.common.log import logger
 from dwf.common.exception import *
+from dwf.common.log import logger
+from dwf.ormmodels import Dataset, datetime
 from dwf.util.id import generate_primary_key
 
 
 class DatasetCRUD:
+
     def __init__(self, db_session):
         self.db_session = db_session
 
     def add_dataset(self, name, datasource_id, subid=None, creator=None, owner=None, current_process=None,
                     last_modifier=None, data_file_format=None, default_filter_string=None, description=None,
                     filter=None, patterns=None, target_entity_class=None):
-        '''
-            Register a dataset into the metadata DB.
+        """
+        创建数据集元信息
 
-            Args:
-                name - The name of dataset.
-                datasource_id - The datasource id of datasource that the dataset belongs to.
-                data_format - The format of dataset.
-                data_filter - The filter path of dataset, used for filtering out data from datasource.
-                data_type - The type of dataset.
-
-            Returns:
-                The ID of added dataset.
-        '''
+        :param name: 数据集名称
+        :param datasource_id: 数据源ID
+        :param subid:
+        :param creator:
+        :param owner:
+        :param current_process:
+        :param last_modifier:
+        :param data_file_format:
+        :param default_filter_string:
+        :param description:
+        :param filter:
+        :param patterns:
+        :param target_entity_class:
+        :return: 数据集ID
+        """
 
         id = generate_primary_key('DSET')
         create_time = datetime.now()
+
+        if creator is None:
+            creator = 'admin'
+        if owner is None:
+            owner = 'admin'
+        if last_modifier is None:
+            last_modifier = 'admin'
 
         dataset = Dataset(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
                           last_modifier=last_modifier, create_time=create_time, name=name,
@@ -45,74 +58,72 @@ class DatasetCRUD:
                           patterns=patterns, target_entity_class=target_entity_class)
         self.db_session.add(dataset)
         self.db_session.commit()
+
         return id
 
     def get_dataset(self, dataset_id):
-        '''
-            Get a dataset by ID from the metadata DB of DWF.
+        """
+        通过ID获取数据集元信息
 
-            Args:
-                dataset_id - The ID of dataset.
+        :param dataset_id: 数据集ID
+        :return: 数据集元信息
+        """
 
-            Returns:
-                The object of dataset.
-
-        '''
         dataset = self.db_session.query(Dataset).get(dataset_id)
+
         return dataset
 
     def get_all_dataset(self):
-        '''
-            Get all datasets from the metadata DB of DWF.
+        """
+        获取全部的数据集元信息
 
-            Args:
-                None
+        :return: 数据集元信息列表
+        """
 
-            Returns:
-                The list of object of dataset.
-        '''
         datasets = self.db_session.query(Dataset).all()
+
         return datasets
 
     def delete_dataset(self, dataset_id):
-        '''
-            Delete a dataset by ID from the metadata DB of DWF.
+        """
+        删除数据集元信息
 
-            Args:
-                dataset_id - The ID of dataset.
+        :param dataset_id: 数据集ID
+        :return: 无
+        """
 
-        '''
         pending = self.db_session.query(Dataset).get(dataset_id)
         self.db_session.delete(pending)
         self.db_session.commit()
-        return True
 
     def update_dataset(self, dataset_id, subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
                        name=None, datasource_id=None, data_file_format=None, default_filter_string=None,
                        description=None, filter=None, patterns=None, target_entity_class=None):
         """
+        更新数据集元信息
 
-        :param dataset_id:
+        :param dataset_id: 数据集ID
         :param subid:
         :param creator:
         :param owner:
         :param current_process:
         :param last_modifier:
-        :param name:
-        :param datasource_id:
+        :param name: 数据集名称
+        :param datasource_id: 数据源ID
         :param data_file_format:
         :param default_filter_string:
         :param description:
         :param filter:
         :param patterns:
         :param target_entity_class:
-        :return:
+        :return: 无
         """
-        pending = self.db_session.query(Dataset).get(dataset_id)
 
         if dataset_id is None:
-            logger.error('dataset_id is needed')
+            logger.error('缺少数据集ID')
             raise PARAM_LACK
+
+        pending = self.db_session.query(Dataset).get(dataset_id)
 
         if subid is not None:
             pending.subid = subid
@@ -143,4 +154,3 @@ class DatasetCRUD:
 
         pending.update_time = datetime.now()
         self.db_session.commit()
-        return pending

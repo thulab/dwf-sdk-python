@@ -8,33 +8,48 @@
 # Version 0.1
 #
 
-from dwf.ormmodels import Model, datetime
-from dwf.common.log import logger
 from dwf.common.exception import *
+from dwf.common.log import logger
+from dwf.ormmodels import Model, datetime
 from dwf.util.id import generate_primary_key
 
 
 class ModelCRUD:
+
     def __init__(self, db_session):
         self.db_session = db_session
 
-    def get_model(self, model_id):
-        # query a model
-        pending = self.db_session.query(Model).get(model_id)
-        return pending
-
-    def get_all_model(self):
-        # query all models
-        models = self.db_session.query(Model).all()
-        return models
-
     def add_model(self, name, algorithm_id, input_data_patterns, output_data_patterns, subid=None, creator=None,
-                  owner=None,
-                  current_process=None, last_modifier=None, description=None, model_path=None, model_resource=None,
-                  usage=None):
-        # add a model
+                  owner=None, current_process=None, last_modifier=None, description=None, model_path=None,
+                  model_resource=None, usage=None):
+        """
+        创建模型元信息
+
+        :param name: 模型名称
+        :param algorithm_id: 算法ID
+        :param input_data_patterns:
+        :param output_data_patterns:
+        :param subid:
+        :param creator:
+        :param owner:
+        :param current_process:
+        :param last_modifier:
+        :param description:
+        :param model_path:
+        :param model_resource:
+        :param usage:
+        :return: 模型ID
+        """
+
         id = generate_primary_key('MODE')
         create_time = datetime.now()
+
+        if creator is None:
+            creator = 'admin'
+        if owner is None:
+            owner = 'admin'
+        if last_modifier is None:
+            last_modifier = 'admin'
 
         model = Model(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
                       last_modifier=last_modifier, create_time=create_time, name=name, algorithm_id=algorithm_id,
@@ -44,23 +59,72 @@ class ModelCRUD:
 
         self.db_session.add(model)
         self.db_session.commit()
+
         return id
 
+    def get_model(self, model_id):
+        """
+        根据ID查询模型元信息
+
+        :param model_id: 模型ID
+        :return: 模型元信息
+        """
+
+        pending = self.db_session.query(Model).get(model_id)
+
+        return pending
+
+    def get_all_model(self):
+        """
+        查询全部模型元信息
+
+        :return: 模型元信息列表
+        """
+
+        model_list = self.db_session.query(Model).all()
+
+        return model_list
+
     def delete_model(self, model_id):
-        # delete a model
+        """
+        删除模型元信息
+
+        :param model_id: 模型ID
+        :return: 无
+        """
+
         pending = self.db_session.query(Model).get(model_id)
         self.db_session.delete(pending)
         self.db_session.commit()
-        return
 
     def update_model(self, model_id, subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
                      name=None, algorithm_id=None, description=None, input_data_patterns=None,
                      output_data_patterns=None, model_path=None, model_resource=None, usage=None):
-        # update a model with param
-        pending = self.db_session.query(Model).get(model_id)
+        """
+        更新模型元信息
+
+        :param model_id: 模型ID
+        :param subid:
+        :param creator:
+        :param owner:
+        :param current_process:
+        :param last_modifier:
+        :param name:
+        :param algorithm_id:
+        :param description:
+        :param input_data_patterns:
+        :param output_data_patterns:
+        :param model_path:
+        :param model_resource:
+        :param usage:
+        :return: 无
+        """
+
         if model_id is None:
-            logger.error('model_id is needed')
+            logger.error('缺少模型ID')
             raise PARAM_LACK
+
+        pending = self.db_session.query(Model).get(model_id)
 
         if subid is not None:
             pending.subid = subid
@@ -91,4 +155,3 @@ class ModelCRUD:
 
         pending.update_time = datetime.now()
         self.db_session.commit()
-        return pending
