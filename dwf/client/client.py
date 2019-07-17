@@ -106,8 +106,3 @@ def upload_dataset(dataset_id, dataset_name, filename, server_url, description, 
         'file_id': file_id,
     }
     print("Response:", requests.post(server_url + '/upload_finish', data=data, headers=headers).text)
-
-from dwf.util.id import generate_primary_key
-upload_dataset(dataset_id=generate_primary_key('DSET'), dataset_name='chaiyouculv', \
-               filename='/Users/sherry/Desktop/xlearn_data/0716.zip', server_url='http://192.168.10.22:32460', \
-               description='柴油粗滤-20190716', owner=None, visibility=3)
