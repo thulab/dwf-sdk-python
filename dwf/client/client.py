@@ -24,9 +24,12 @@ def upload_algorithm(algo_id, server_url, filename, algorithm_name, description,
         'mirror': mirror,
         'visibility': 3,
         'usage': 3,
-        'owner': deploy_config.get("CLUSTER", "OWNER")
+        'owner': deploy_config.get("CLUSTER", "OWNER"),
+        'user':'USER44c2f08711e88d4934e12dd07c07',
+        'username':'xlearn'
     }
     response = requests.post(server_url + '/algorithm/upload', data=data, headers=headers)
+    print(response.text)
     response = response.json()
     print("=" * 50)
     print(response)
@@ -65,7 +68,7 @@ def upload_dataset(dataset_id, dataset_name, filename, server_url, description, 
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'token': deploy_config.get("CLUSTER", "TOKEN")
+        #'token': deploy_config.get("CLUSTER", "TOKEN")
     }
     data = {
         'id': dataset_id,
@@ -73,7 +76,9 @@ def upload_dataset(dataset_id, dataset_name, filename, server_url, description, 
         'filename': real_name,
         'description': description,
         'visibility': visibility,
-        'owner': owner
+        'owner': owner,
+        'user':'USER44c2f08711e88d4934e12dd07c07',
+        'username':'xlearn'
     }
     response = requests.post(server_url + '/dataset/upload', data=data, headers=headers)
     response = response.json()
@@ -101,3 +106,8 @@ def upload_dataset(dataset_id, dataset_name, filename, server_url, description, 
         'file_id': file_id,
     }
     print("Response:", requests.post(server_url + '/upload_finish', data=data, headers=headers).text)
+
+from dwf.util.id import generate_primary_key
+upload_dataset(dataset_id=generate_primary_key('DSET'), dataset_name='chaiyouculv', \
+               filename='/Users/sherry/Desktop/xlearn_data/0716.zip', server_url='http://192.168.10.22:32460', \
+               description='柴油粗滤-20190716', owner=None, visibility=3)
