@@ -1,5 +1,7 @@
-import requests
 import os
+
+import requests
+
 from dwf.common.config import deploy_config
 
 
@@ -54,33 +56,33 @@ def upload_algorithm(algo_id, server_url, filename, algorithm_name, description,
     print("Response:", requests.post(server_url + '/upload_finish', data=data, headers=headers).text)
 
 
-def upload_dataset(dataset_id, dataset_name, filename, server_url, description, visibility, owner):
+def upload_dataset(dataset_name, description):
     kilobytes = 1024
     megabytes = kilobytes * 1000
     chunk_size = int(2 * megabytes)
-    # filename = "/Users/yangyucheng/Desktop/xlearn-data/xlearn-data1.zip"
-    # server_url = "http://192.168.6.112:8888"
+    server_url = "http://192.168.10.22:30799/api/engine"
+    filename = "/Users/Lanxiaozhi/0920crop.zip"
 
     part_num = 0
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'token': deploy_config.get("CLUSTER", "TOKEN")
+        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjM4NTUwNTgsImlhdCI6MTU2Mzg1MTQ1OCwibmJmIjoxNTYzODUxNDU4LCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.pxOaioX45W8L6fwaJtbtSd4XV2D2uuWrvOanqjvh9lg"
     }
     data = {
-        'id': dataset_id,
         'name': dataset_name,
-        'filename': real_name,
+        'datasource_id': 'DSOU30d2d78e6cb211e98f720a580af4',
         'description': description,
-        'visibility': visibility,
-        'owner': owner
+        'filename': real_name,
+        # 'patterns': '',
+        # 'data_file_format': '',
     }
-    response = requests.post(server_url + '/dataset/upload', data=data, headers=headers)
+    response = requests.post(server_url + '/dataset/add', data=data, headers=headers)
     response = response.json()
     print("=" * 50)
     print(response)
     print("=" * 50)
-    file_id = response['file_id']
+    file_id = response['data']
     while True:
         chunk = input_file.read(chunk_size)
         if not chunk:
@@ -93,11 +95,14 @@ def upload_dataset(dataset_id, dataset_name, filename, server_url, description, 
             'chunk': part_num,
         }
         print("Uploading chunk %d:" % part_num)
-        print("Response:", requests.post(server_url + '/upload', data=data, headers=headers, files=files).text)
+        print("Response:", requests.post(server_url + '/dataset/upload', data=data, headers=headers, files=files).text)
         part_num += 1
     input_file.close()
 
     data = {
         'file_id': file_id,
     }
-    print("Response:", requests.post(server_url + '/upload_finish', data=data, headers=headers).text)
+    print("Response:", requests.post(server_url + '/dataset/upload_finish', data=data, headers=headers).text)
+
+
+upload_dataset(dataset_name='test_upload23', description='test')
