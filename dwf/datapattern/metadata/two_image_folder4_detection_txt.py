@@ -27,11 +27,15 @@ class TwoImageFolder4Detection_txt(BasePattern):
     def check(self, folder_path):
         image_path = os.path.join(folder_path, 'Images')
         label_path = os.path.join(folder_path, 'Labels')
+        label_txt_path = os.path.join(folder_path, 'labels.txt')
 
         if not os.path.exists(image_path):
             raise DATA_PATTERN_MISMATCH
 
         if not os.path.exists(label_path):
+            raise DATA_PATTERN_MISMATCH
+
+        if not os.path.exists(label_txt_path):
             raise DATA_PATTERN_MISMATCH
 
         image_list = os.listdir(image_path)
@@ -63,7 +67,16 @@ class TwoImageFolder4Detection_txt(BasePattern):
         self.organization_parameter_channel = channel_num
         return self.dumps()
 
-# pattern = TwoImageFolder4Detection_txt()
-# print(pattern.generate('/Users/sherry/Desktop/xlearn_data/1228'))
+    def generate_description(self):
+        if self.organization_parameter_channel == 3:
+            image_type = 'RGB'
+        else:
+            # description_str = 'gray images with detection information in txt file'
+            image_type = 'gray'
+        description_str = image_type + ' ' + self.data_type + ' ' + 'in' + ' ' + self.organization
+        return description_str
 
+pattern = TwoImageFolder4Detection_txt()
+print(pattern.generate('/Users/sherry/Desktop/xlearn_data/1228'))
+print(pattern.generate_description())
 

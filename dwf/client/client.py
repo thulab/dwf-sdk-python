@@ -26,9 +26,12 @@ def upload_algorithm(algo_id, server_url, filename, algorithm_name, description,
         'mirror': mirror,
         'visibility': 3,
         'usage': 3,
-        'owner': deploy_config.get("CLUSTER", "OWNER")
+        'owner': deploy_config.get("CLUSTER", "OWNER"),
+        'user':'USER44c2f08711e88d4934e12dd07c07',
+        'username':'xlearn'
     }
     response = requests.post(server_url + '/algorithm/upload', data=data, headers=headers)
+    print(response.text)
     response = response.json()
     print("=" * 50)
     print(response)
