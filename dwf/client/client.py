@@ -27,8 +27,8 @@ def upload_algorithm(algo_id, server_url, filename, algorithm_name, description,
         'visibility': 3,
         'usage': 3,
         'owner': deploy_config.get("CLUSTER", "OWNER"),
-        'user':'USER44c2f08711e88d4934e12dd07c07',
-        'username':'xlearn'
+        'user': 'USER44c2f08711e88d4934e12dd07c07',
+        'username': 'xlearn'
     }
     response = requests.post(server_url + '/algorithm/upload', data=data, headers=headers)
     print(response.text)
@@ -106,6 +106,3 @@ def upload_dataset(dataset_name, description):
         'file_id': file_id,
     }
     print("Response:", requests.post(server_url + '/dataset/upload_finish', data=data, headers=headers).text)
-
-
-upload_dataset(dataset_name='test_upload23', description='test')

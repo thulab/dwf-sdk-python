@@ -77,6 +77,6 @@ class TwoImageFolder4Detection_txt(BasePattern):
         return description_str
 
 pattern = TwoImageFolder4Detection_txt()
-print(pattern.generate('/Users/sherry/Desktop/xlearn_data/1228'))
-print(pattern.generate_description())
+# print(pattern.generate('/Users/sherry/Desktop/xlearn_data/1228'))
+# print(pattern.generate_description())
 
