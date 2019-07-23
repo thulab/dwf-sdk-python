@@ -70,7 +70,7 @@ def upload_dataset(dataset_name, description):
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjM4NTUwNTgsImlhdCI6MTU2Mzg1MTQ1OCwibmJmIjoxNTYzODUxNDU4LCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.pxOaioX45W8L6fwaJtbtSd4XV2D2uuWrvOanqjvh9lg"
+        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjM4NjI4OTUsImlhdCI6MTU2Mzg1OTI5NSwibmJmIjoxNTYzODU5Mjk1LCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.x-CgduDbYiWpiAJ_A0NCd3mjtuB5C6ZtUPwdxc-EoYM"
     }
     data = {
         'name': dataset_name,
