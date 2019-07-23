@@ -8,10 +8,12 @@
 # Version 1.0
 #
 
-from dwf.ormmodels import *
-from dwf.common.log import logger
+import traceback
+
 from dwf.common.exception import *
-from dwf.util.id import generate_primary_key, generate_primary_key_without_prefix
+from dwf.common.log import logger
+from dwf.ormmodels import *
+from dwf.util.id import generate_primary_key
 
 
 class AlgorithmCRUD:
@@ -19,9 +21,11 @@ class AlgorithmCRUD:
     def __init__(self, db_session):
         self.db_session = db_session
 
-    def add_algorithm(self, name, display_name=None, description=None, entry_name=None, algorithm_type=None,
+    def add_algorithm(self, name, creator=None, owner=None, last_modifier=None, display_name=None, description=None,
+                      entry_name=None, algorithm_type=None,
                       hyperparameter_config=None, available=None, train_input_pattern=None, train_output_pattern=None,
-                      model_input_pattern=None, model_output_pattern=None, runtime=None, learning=None, package_id=None):
+                      model_input_pattern=None, model_output_pattern=None, runtime=None, learning=None,
+                      package_id=None):
         #    NO.A301
         #	     Add an algorithm into the metadata DB.
         #    Args:
@@ -43,22 +47,41 @@ class AlgorithmCRUD:
         #	     Algorithm id
         #    Exceptions:
         #
+
+        check_name = self.db_session.query(Model).filter(Model.name == name)
+        if check_name is not None:
+            raise DUPLICATE_NAME
+
         id = generate_primary_key('ALGO')
         create_time = datetime.now()
 
+        if creator is None:
+            creator = 'admin'
+        if owner is None:
+            owner = 'admin'
+        if last_modifier is None:
+            last_modifier = 'admin'
         if available is None:
             available = 1
 
-        algorithm = Algorithm(id=id, subid=id, creator='admin', owner='admin', last_modifier='admin',
-                              create_time=create_time, name=name, display_name=display_name,
-                              algorithm_type=algorithm_type, description=description,
-                              alg_input_patterns=train_input_pattern, alg_output_patterns=train_output_pattern,
-                              parameters=hyperparameter_config, entry_name=entry_name, available=available,
-                              isbuiltin=0, isdeleted=0, islearning=learning,model_input_patterns=model_input_pattern,
-                              model_output_patterns=model_output_pattern, package_id=package_id, prog_language='python',
-                              reference_count=0,runtime=runtime)
-        self.db_session.add(algorithm)
-        self.db_session.commit()
+        try:
+            algorithm = Algorithm(id=id, subid=id, creator=creator, owner=owner, last_modifier=last_modifier,
+                                  create_time=create_time, name=name, display_name=display_name,
+                                  algorithm_type=algorithm_type, description=description,
+                                  alg_input_patterns=train_input_pattern, alg_output_patterns=train_output_pattern,
+                                  parameters=hyperparameter_config, entry_name=entry_name, available=available,
+                                  isbuiltin=0, isdeleted=0, islearning=learning,
+                                  model_input_patterns=model_input_pattern,
+                                  model_output_patterns=model_output_pattern, package_id=package_id,
+                                  prog_language='python',
+                                  reference_count=0, runtime=runtime)
+            self.db_session.add(algorithm)
+            self.db_session.commit()
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            self.db_session.rollback()
+            raise ADD_FAILED
         return id
 
     def update_algorithm(self, algorithm_id, name=None, display_name=None, description=None, entry_name=None,
@@ -89,49 +112,64 @@ class AlgorithmCRUD:
         #    Exceptions:
         #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
 
+        if algorithm_id is None:
+            logger.error('缺少算法ID')
+            raise PARAM_LACK
+
+        check_name = self.db_session.query(Algorithm).filter(Algorithm.name == name)
+        if check_name is not None:
+            raise DUPLICATE_NAME
+
         pending = self.db_session.query(Algorithm).get(algorithm_id)
 
         if pending is None:
             logger.error('Algorithm is not found')
             raise NON_EXISTING_ALGORITHM
 
-        if name is not None:
-            pending.name = name
+        try:
+            if name is not None:
+                pending.name = name
 
-        if display_name is not None:
-            pending.display_name = display_name
+            if display_name is not None:
+                pending.display_name = display_name
 
-        if description is not None:
-            pending.description = description
+            if description is not None:
+                pending.description = description
 
-        if entry_name is not None:
-            pending.entry_name = entry_name
+            if entry_name is not None:
+                pending.entry_name = entry_name
 
-        if hyperparameter_config is not None:
-            pending.parameters = hyperparameter_config
+            if hyperparameter_config is not None:
+                pending.parameters = hyperparameter_config
 
-        if train_input_pattern is not None:
-            pending.alg_input_patterns = train_input_pattern
+            if train_input_pattern is not None:
+                pending.alg_input_patterns = train_input_pattern
 
-        if train_output_pattern is not None:
-            pending.alg_output_patterns = train_output_pattern
+            if train_output_pattern is not None:
+                pending.alg_output_patterns = train_output_pattern
 
-        if model_input_pattern is not None:
-            pending.model_input_patterns = model_input_pattern
+            if model_input_pattern is not None:
+                pending.model_input_patterns = model_input_pattern
 
-        if model_output_pattern is not None:
-            pending.model_output_patterns = model_output_pattern
+            if model_output_pattern is not None:
+                pending.model_output_patterns = model_output_pattern
 
-        if runtime is not None:
-            pending.runtime = runtime
+            if runtime is not None:
+                pending.runtime = runtime
 
-        if learning is not None:
-            pending.islearning = learning
+            if learning is not None:
+                pending.islearning = learning
 
-        if package_id is not None:
-            pending.package_id = package_id
+            if package_id is not None:
+                pending.package_id = package_id
 
-        self.db_session.commit()
+            self.db_session.commit()
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            self.db_session.rollback()
+            raise UPDATE_FAILED
+
         return algorithm_id
 
     def get_algorithm(self, algorithm_id):
@@ -143,10 +181,18 @@ class AlgorithmCRUD:
         #  	     algorithm_object
         #    Exceptions:
         #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
-        algorithm = self.db_session.query(Algorithm).get(algorithm_id)
+
+        try:
+            algorithm = self.db_session.query(Algorithm).get(algorithm_id)
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            raise QUERY_FAILED
+
         if algorithm is None:
             logger.error('Algorithm is not found')
             raise NON_EXISTING_ALGORITHM
+
         return algorithm
 
     def get_all_algorithms(self):
@@ -156,7 +202,14 @@ class AlgorithmCRUD:
         #        None
         #    Returns：
         #        algorithm_info list
-        algorithms = self.db_session.query(Algorithm).all()
+
+        try:
+            algorithms = self.db_session.query(Algorithm).all()
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            raise QUERY_FAILED
+
         return algorithms
 
     def delete_algorithm(self, algorithm_id):
@@ -170,6 +223,7 @@ class AlgorithmCRUD:
         #	     None.
         #    Exceptions:
         #        NON_EXISTING_ALGORITHM - The given algorithm_id does not exist.
+
         algorithm = self.db_session.query(Algorithm).get(algorithm_id)
         if algorithm is None:
             logger.error('Algorithm is not found')

@@ -52,3 +52,12 @@ NOT_IMPLEMENTED = DWFException(5001, '方法未实现')
 Exceptions for Data Pattern
 '''
 DATA_PATTERN_MISMATCH = DWFException(6001, '数据模式不匹配')
+
+'''
+Exceptions for SqlAlchemy
+'''
+DUPLICATE_NAME = DWFException(400, '该名称已存在')
+ADD_FAILED = DWFException(400, '数据库添加失败')
+QUERY_FAILED = DWFException(404, '数据库查询失败')
+UPDATE_FAILED = DWFException(400, '数据库更新失败')
+DELETE_FAILED = DWFException(404, '数据库删除失败')

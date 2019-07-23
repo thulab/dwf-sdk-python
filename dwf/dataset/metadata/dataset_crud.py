@@ -8,6 +8,8 @@
 # Version 0.1
 #
 
+import traceback
+
 from dwf.common.exception import *
 from dwf.common.log import logger
 from dwf.ormmodels import Dataset, datetime
@@ -41,6 +43,10 @@ class DatasetCRUD:
         :return: 数据集ID
         """
 
+        check_name = self.db_session.query(Dataset).filter(Dataset.name == name)
+        if check_name is not None:
+            raise DUPLICATE_NAME
+
         id = generate_primary_key('DSET')
         create_time = datetime.now()
 
@@ -51,13 +57,19 @@ class DatasetCRUD:
         if last_modifier is None:
             last_modifier = 'admin'
 
-        dataset = Dataset(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
-                          last_modifier=last_modifier, create_time=create_time, name=name,
-                          data_file_format=data_file_format, datasource_id=datasource_id,
-                          default_filter_string=default_filter_string, description=description, filter=filter,
-                          patterns=patterns, target_entity_class=target_entity_class)
-        self.db_session.add(dataset)
-        self.db_session.commit()
+        try:
+            dataset = Dataset(id=id, subid=subid, creator=creator, owner=owner, current_process=current_process,
+                              last_modifier=last_modifier, create_time=create_time, name=name,
+                              data_file_format=data_file_format, datasource_id=datasource_id,
+                              default_filter_string=default_filter_string, description=description, filter=filter,
+                              patterns=patterns, target_entity_class=target_entity_class)
+            self.db_session.add(dataset)
+            self.db_session.commit()
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            self.db_session.rollback()
+            raise ADD_FAILED
 
         return id
 
@@ -69,7 +81,12 @@ class DatasetCRUD:
         :return: 数据集元信息
         """
 
-        dataset = self.db_session.query(Dataset).get(dataset_id)
+        try:
+            dataset = self.db_session.query(Dataset).get(dataset_id)
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            raise QUERY_FAILED
 
         return dataset
 
@@ -80,7 +97,12 @@ class DatasetCRUD:
         :return: 数据集元信息列表
         """
 
-        datasets = self.db_session.query(Dataset).all()
+        try:
+            datasets = self.db_session.query(Dataset).all()
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            raise QUERY_FAILED
 
         return datasets
 
@@ -92,9 +114,15 @@ class DatasetCRUD:
         :return: 无
         """
 
-        pending = self.db_session.query(Dataset).get(dataset_id)
-        self.db_session.delete(pending)
-        self.db_session.commit()
+        try:
+            pending = self.db_session.query(Dataset).get(dataset_id)
+            self.db_session.delete(pending)
+            self.db_session.commit()
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            self.db_session.rollback()
+            raise DELETE_FAILED
 
     def update_dataset(self, dataset_id, subid=None, creator=None, owner=None, current_process=None, last_modifier=None,
                        name=None, datasource_id=None, data_file_format=None, default_filter_string=None,
@@ -123,34 +151,44 @@ class DatasetCRUD:
             logger.error('缺少数据集ID')
             raise PARAM_LACK
 
+        check_name = self.db_session.query(Dataset).filter(Dataset.name == name)
+        if check_name is not None:
+            raise DUPLICATE_NAME
+
         pending = self.db_session.query(Dataset).get(dataset_id)
 
-        if subid is not None:
-            pending.subid = subid
-        if creator is not None:
-            pending.creator = creator
-        if owner is not None:
-            pending.owner = owner
-        if current_process is not None:
-            pending.current_process = current_process
-        if last_modifier is not None:
-            pending.last_modifier = last_modifier
-        if name is not None:
-            pending.name = name
-        if datasource_id is not None:
-            pending.datasource_id = datasource_id
-        if data_file_format is not None:
-            pending.data_file_format = data_file_format
-        if default_filter_string is not None:
-            pending.default_filter_string = default_filter_string
-        if description is not None:
-            pending.description = description
-        if filter is not None:
-            pending.filter = filter
-        if patterns is not None:
-            pending.patterns = patterns
-        if target_entity_class is not None:
-            pending.target_entity_class = target_entity_class
+        try:
+            if subid is not None:
+                pending.subid = subid
+            if creator is not None:
+                pending.creator = creator
+            if owner is not None:
+                pending.owner = owner
+            if current_process is not None:
+                pending.current_process = current_process
+            if last_modifier is not None:
+                pending.last_modifier = last_modifier
+            if name is not None:
+                pending.name = name
+            if datasource_id is not None:
+                pending.datasource_id = datasource_id
+            if data_file_format is not None:
+                pending.data_file_format = data_file_format
+            if default_filter_string is not None:
+                pending.default_filter_string = default_filter_string
+            if description is not None:
+                pending.description = description
+            if filter is not None:
+                pending.filter = filter
+            if patterns is not None:
+                pending.patterns = patterns
+            if target_entity_class is not None:
+                pending.target_entity_class = target_entity_class
 
-        pending.update_time = datetime.now()
-        self.db_session.commit()
+            pending.update_time = datetime.now()
+            self.db_session.commit()
+        except Exception as e:
+            logger.error(e)
+            logger.debug(traceback.format_exc())
+            self.db_session.rollback()
+            raise UPDATE_FAILED
