@@ -17,7 +17,7 @@ def upload_algorithm(algo_id, server_url, filename, algorithm_name, description,
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'token': deploy_config.get("CLUSTER", "TOKEN"),
+        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjM4NjI4OTUsImlhdCI6MTU2Mzg1OTI5NSwibmJmIjoxNTYzODU5Mjk1LCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.x-CgduDbYiWpiAJ_A0NCd3mjtuB5C6ZtUPwdxc-EoYM"
     }
 
     f = zipfile.ZipFile(sample_dataset_path,'r')
@@ -46,13 +46,11 @@ def upload_algorithm(algo_id, server_url, filename, algorithm_name, description,
         # 'filename': real_name,
         # 'requirements': requirements,
         'entry_name': entrance,
-        'train_input_pattern':patterns,
+        'train_input_pattern':patterns
         # 'mirror': mirror,
         # 'visibility': 3,
         # 'usage': 3,
         # 'owner': deploy_config.get("CLUSTER", "OWNER"),
-        'user': 'USER44c2f08711e88d4934e12dd07c07',
-        'username': 'xlearn'
     }
     response = requests.post(server_url + '/algorithm/upload', data=data, headers=headers)
     print(response.text)
@@ -94,7 +92,7 @@ def upload_dataset(dataset_name, description):
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'Authorization': "BearereyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjM4NjI4OTUsImlhdCI6MTU2Mzg1OTI5NSwibmJmIjoxNTYzODU5Mjk1LCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.x-CgduDbYiWpiAJ_A0NCd3mjtuB5C6ZtUPwdxc-EoYM"
+        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjM4NjI4OTUsImlhdCI6MTU2Mzg1OTI5NSwibmJmIjoxNTYzODU5Mjk1LCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.x-CgduDbYiWpiAJ_A0NCd3mjtuB5C6ZtUPwdxc-EoYM"
     }
 
     f = zipfile.ZipFile(filename,'r')
