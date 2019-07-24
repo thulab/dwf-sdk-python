@@ -16,3 +16,7 @@ class BasePattern(object):
 
     def generate(self, folder_path):
         raise NotImplementedError
+
+    def generate_description(self):
+        pass
+
