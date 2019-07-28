@@ -28,6 +28,9 @@ class ImageFolder4Classfication(BasePattern):
     def check(self, folder_path):
         try:
             dataset_pending = ImageFolder(root=folder_path)
+            for class_dir in os.listdir(folder_path):
+                if os.path.isfile(os.join(folder_path, class_dir)):
+                    raise DATA_PATTERN_MISMATCH
         except:
             raise DATA_PATTERN_MISMATCH
         return True
@@ -56,7 +59,16 @@ class ImageFolder4Classfication(BasePattern):
         self.organization_parameter_channel = channel_num
         return self.dumps()
 
-# pattern = ImageFolder4Classfication()
-# print(pattern.generate('/Users/sherry/Desktop/0920crop'))
+    def generate_description(self):
+        if self.organization_parameter_channel == 3:
+            image_type = 'RGB'
+        else:
+            # description_str = 'gray images with detection information in txt file'
+            image_type = 'gray'
+        description_str = image_type + ' ' + self.data_type + ' ' + 'in' + ' ' + self.organization
+        return description_str
 
+# pattern = ImageFolder4Classfication()
+# print(pattern.generate('/Users/sherry/Desktop/xlearn_data/0716'))
+# print(pattern.generate_description())
 

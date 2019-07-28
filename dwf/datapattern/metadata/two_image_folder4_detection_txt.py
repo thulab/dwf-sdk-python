@@ -41,8 +41,8 @@ class TwoImageFolder4Detection_txt(BasePattern):
         image_list = os.listdir(image_path)
         label_list = os.listdir(label_path)
 
-        if len(image_list) != len(label_list):
-            raise DATA_PATTERN_MISMATCH
+        # if len(image_list) != len(label_list):
+        #     raise DATA_PATTERN_MISMATCH
         return True
 
     def generate(self, folder_path):
@@ -76,7 +76,7 @@ class TwoImageFolder4Detection_txt(BasePattern):
         description_str = image_type + ' ' + self.data_type + ' ' + 'in' + ' ' + self.organization
         return description_str
 
-pattern = TwoImageFolder4Detection_txt()
+# pattern = TwoImageFolder4Detection_txt()
 # print(pattern.generate('/Users/sherry/Desktop/xlearn_data/1228'))
 # print(pattern.generate_description())
 
