@@ -43,8 +43,8 @@ class DatasetCRUD:
         :return: 数据集ID
         """
 
-        check_name = self.db_session.query(Dataset).filter(Dataset.name == name)
-        if check_name is not None:
+        check_name = self.db_session.query(Dataset).filter(Dataset.name == name).all()
+        if check_name :
             raise DUPLICATE_NAME
 
         id = generate_primary_key('DSET')
@@ -151,8 +151,8 @@ class DatasetCRUD:
             logger.error('缺少数据集ID')
             raise PARAM_LACK
 
-        check_name = self.db_session.query(Dataset).filter(Dataset.name == name)
-        if check_name is not None:
+        check_name = self.db_session.query(Dataset).filter(Dataset.name == name).all()
+        if check_name :
             raise DUPLICATE_NAME
 
         pending = self.db_session.query(Dataset).get(dataset_id)

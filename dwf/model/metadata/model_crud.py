@@ -43,8 +43,8 @@ class ModelCRUD:
         :return: 模型ID
         """
 
-        check_name = self.db_session.query(Model).filter(Model.name == name)
-        if check_name is not None:
+        check_name = self.db_session.query(Model).filter(Model.name == name).all()
+        if check_name:
             raise DUPLICATE_NAME
 
         id = generate_primary_key('MODE')
@@ -152,8 +152,8 @@ class ModelCRUD:
             logger.error('缺少模型ID')
             raise PARAM_LACK
 
-        check_name = self.db_session.query(Model).filter(Model.name == name)
-        if check_name is not None:
+        check_name = self.db_session.query(Model).filter(Model.name == name).all()
+        if check_name:
             raise DUPLICATE_NAME
 
         pending = self.db_session.query(Model).get(model_id)
