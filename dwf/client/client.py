@@ -99,25 +99,25 @@ def upload_dataset(dataset_name, description):
     }
     patterns = ''
 
-    # f = zipfile.ZipFile(filename,'r')
-    # for file in f.namelist():
-    #     f.extract(file,"./tmp/")
-    #
-    # try:
-    #     pattern = TwoImageFolder4Detection_txt()
-    #     pattern.check('./tmp/')
-    #     patterns = pattern.generate('./tmp')
-    # except:
-    #     pass
-    #
+    f = zipfile.ZipFile(filename,'r')
+    for file in f.namelist():
+        f.extract(file,"./tmp/")
+
+    try:
+        pattern = TwoImageFolder4Detection_txt()
+        pattern.check('./tmp/')
+        patterns = pattern.generate('./tmp')
+    except:
+        pass
+    
     # try:
     #     pattern = ImageFolder4Classfication()
     #     pattern.check('./tmp/')
     #     patterns = pattern.generate('./tmp')
     # except:
     #     pass
-    #
-    # shutil.rmtree('./tmp/')
+
+    shutil.rmtree('./tmp/')
 
     data = {
         'name': dataset_name,
