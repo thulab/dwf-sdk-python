@@ -48,8 +48,8 @@ class AlgorithmCRUD:
         #    Exceptions:
         #
 
-        check_name = self.db_session.query(Model).filter(Model.name == name)
-        if check_name is not None:
+        check_name = self.db_session.query(Algorithm).filter(Algorithm.name == name).all()
+        if check_name:
             raise DUPLICATE_NAME
 
         id = generate_primary_key('ALGO')
@@ -116,8 +116,8 @@ class AlgorithmCRUD:
             logger.error('缺少算法ID')
             raise PARAM_LACK
 
-        check_name = self.db_session.query(Algorithm).filter(Algorithm.name == name)
-        if check_name is not None:
+        check_name = self.db_session.query(Algorithm).filter(Algorithm.name == name).all()
+        if check_name:
             raise DUPLICATE_NAME
 
         pending = self.db_session.query(Algorithm).get(algorithm_id)
