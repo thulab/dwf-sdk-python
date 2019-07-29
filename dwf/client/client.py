@@ -19,7 +19,7 @@ def upload_algorithm(algorithm_name, description, requirements=None, entrance=No
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjQ0MDUzMTIsImlhdCI6MTU2NDQwMTcxMiwibmJmIjoxNTY0NDAxNzEyLCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.ayAqhDE1FvsuF4gZ_jVNif70F3r-wsBPixiLQxvbiHU"
+        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjQzOTI3NzMsImlhdCI6MTU2NDM4OTE3MywibmJmIjoxNTY0Mzg5MTczLCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.8Hk577Y4J8y50Qw6e4MAkyJjmbWFvvfPAVVFo0-QZXo"
     }
     patterns = ''
     # if sample_dataset_path is not None:
@@ -95,7 +95,7 @@ def upload_dataset(dataset_name, description):
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjQ0MDUzMTIsImlhdCI6MTU2NDQwMTcxMiwibmJmIjoxNTY0NDAxNzEyLCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.ayAqhDE1FvsuF4gZ_jVNif70F3r-wsBPixiLQxvbiHU"
+        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjQzOTI3NzMsImlhdCI6MTU2NDM4OTE3MywibmJmIjoxNTY0Mzg5MTczLCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.8Hk577Y4J8y50Qw6e4MAkyJjmbWFvvfPAVVFo0-QZXo"
     }
     patterns = ''
 
@@ -109,7 +109,7 @@ def upload_dataset(dataset_name, description):
         patterns = pattern.generate('./tmp')
     except:
         pass
-    
+
     # try:
     #     pattern = ImageFolder4Classfication()
     #     pattern.check('./tmp/')
