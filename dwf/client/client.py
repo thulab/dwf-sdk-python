@@ -8,18 +8,18 @@ from dwf.common.config import deploy_config
 from dwf.datapattern.metadata.image_folder4_classification import ImageFolder4Classfication
 from dwf.datapattern.metadata.two_image_folder4_detection_txt import TwoImageFolder4Detection_txt
 
-def upload_algorithm(algorithm_name, description, requirements=None, entrance=None, mirror=None, sample_dataset_path=None):
+def upload_algorithm(server_url, filename, algorithm_name, description, requirements=None, entrance=None, mirror=None, sample_dataset_path=None):
     kilobytes = 1024
     megabytes = kilobytes * 1000
     chunk_size = int(2 * megabytes)
-    server_url = "http://192.168.35.59:30800/api/engine"
-    filename = "/Users/sherry/GitHub/Xlearn-Algorithms/SSD/SSD.zip"
+    # server_url = "http://192.168.35.59:30800/api/engine"
+    # filename = "/Users/sherry/GitHub/Xlearn-Algorithms/ResNet/ResNet.zip"
 
     part_num = 0
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjQzOTI3NzMsImlhdCI6MTU2NDM4OTE3MywibmJmIjoxNTY0Mzg5MTczLCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.8Hk577Y4J8y50Qw6e4MAkyJjmbWFvvfPAVVFo0-QZXo"
+        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjQ0MDg1NjcsIm5iZiI6MTU2NDQwODU2NywidXNlcl9pZCI6IlVTRVI0NGMyZjA4NzExZTg4ZDQ5MzRlMTJkZDA3YzA3IiwidXNlcm5hbWUiOiJ4bGVhcm4ifQ.75rPfxqIagzWtPemfX0NGTPoxqRhBJUC0PTp-YSdgGU"
     }
     patterns = ''
     # if sample_dataset_path is not None:
@@ -84,18 +84,18 @@ def upload_algorithm(algorithm_name, description, requirements=None, entrance=No
     print("Response:", requests.post(server_url + '/algorithm/upload_finish', data=data, headers=headers).text)
 
 
-def upload_dataset(dataset_name, description):
+def upload_dataset(server_url, filename, dataset_name, description):
     kilobytes = 1024
     megabytes = kilobytes * 1000
     chunk_size = int(2 * megabytes)
-    server_url = "http://192.168.35.59:30800/api/engine"
-    filename = "/Users/sherry/Desktop/xlearn_data/jilv.zip"
+    # server_url = "http://192.168.35.59:30800/api/engine"
+    # filename = "/Users/sherry/Desktop/xlearn_data/jilv.zip"
 
     part_num = 0
     input_file = open(filename, 'rb')
     real_name = os.path.basename(filename)
     headers = {
-        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NjQzOTI3NzMsImlhdCI6MTU2NDM4OTE3MywibmJmIjoxNTY0Mzg5MTczLCJ1c2VyX2lkIjoiVVNFUjQ0YzJmMDg3MTFlODhkNDkzNGUxMmRkMDdjMDciLCJ1c2VybmFtZSI6InhsZWFybiJ9.8Hk577Y4J8y50Qw6e4MAkyJjmbWFvvfPAVVFo0-QZXo"
+        'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjQ0MDg1NjcsIm5iZiI6MTU2NDQwODU2NywidXNlcl9pZCI6IlVTRVI0NGMyZjA4NzExZTg4ZDQ5MzRlMTJkZDA3YzA3IiwidXNlcm5hbWUiOiJ4bGVhcm4ifQ.75rPfxqIagzWtPemfX0NGTPoxqRhBJUC0PTp-YSdgGU"
     }
     patterns = ''
 
@@ -158,6 +158,12 @@ def upload_dataset(dataset_name, description):
     }
     print("Response:", requests.post(server_url + '/dataset/upload_finish', data=data, headers=headers).text)
 
-# upload_dataset('jilv','ji lv')
-# upload_algorithm(algorithm_name="SSD", \
-#                  description="SSD", entrance='ssd_train.train')
+upload_dataset(server_url = "http://192.168.35.59:30800/api/engine", \
+               filename = "/Users/sherry/Desktop/xlearn_data/chaiyouculv.zip", \
+               dataset_name='柴油粗滤数据集', \
+               description='天远挖掘机柴油粗滤检测数据集')
+# upload_algorithm(server_url = "http://192.168.35.59:30800/api/engine", \
+#                  filename = "/Users/sherry/GitHub/Xlearn-Algorithms/SSD/SSD.zip", \
+#                  algorithm_name="SSD", \
+#                  description="SSD", \
+#                  entrance='ssd_train.train')
