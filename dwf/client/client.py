@@ -158,12 +158,12 @@ def upload_dataset(server_url, filename, dataset_name, description):
     }
     print("Response:", requests.post(server_url + '/dataset/upload_finish', data=data, headers=headers).text)
 
-upload_dataset(server_url = "http://192.168.35.59:30800/api/engine", \
-               filename = "/Users/sherry/Desktop/xlearn_data/chaiyouculv.zip", \
-               dataset_name='柴油粗滤数据集', \
-               description='天远挖掘机柴油粗滤检测数据集')
+upload_dataset(server_url = "http://192.168.111.25:30800/api/engine", \
+               filename = "/Users/sherry/Desktop/xlearn_data/yeyayouxianghuxilvxin.zip", \
+               dataset_name='液压油箱呼吸滤芯', \
+               description='液压油箱呼吸滤芯')
 # upload_algorithm(server_url = "http://192.168.35.59:30800/api/engine", \
-#                  filename = "/Users/sherry/GitHub/Xlearn-Algorithms/SSD/SSD.zip", \
-#                  algorithm_name="SSD", \
-#                  description="SSD", \
-#                  entrance='ssd_train.train')
+#                  filename = "/Users/sherry/GitHub/Xlearn-Algorithms/Xlearn-Serving.zip", \
+#                  algorithm_name="Xlearn-Serving.zip", \
+#                  description="Xlearn-Serving", \
+#                  entrance='')
