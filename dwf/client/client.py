@@ -8,7 +8,8 @@ from dwf.common.config import deploy_config
 from dwf.datapattern.metadata.image_folder4_classification import ImageFolder4Classfication
 from dwf.datapattern.metadata.two_image_folder4_detection_txt import TwoImageFolder4Detection_txt
 
-def upload_algorithm(server_url, filename, algorithm_name, description, requirements=None, entrance=None, mirror=None, sample_dataset_path=None):
+def upload_algorithm(server_url, filename, algorithm_name, description, train_input_pattern=None, model_input_pattern=None, \
+                     hyperparameter_config=None, requirements=None, entrance=None, mirror=None, sample_dataset_path=None, learning=1):
     kilobytes = 1024
     megabytes = kilobytes * 1000
     chunk_size = int(2 * megabytes)
@@ -21,7 +22,6 @@ def upload_algorithm(server_url, filename, algorithm_name, description, requirem
     headers = {
         'Authorization': "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1NjQ0MDg1NjcsIm5iZiI6MTU2NDQwODU2NywidXNlcl9pZCI6IlVTRVI0NGMyZjA4NzExZTg4ZDQ5MzRlMTJkZDA3YzA3IiwidXNlcm5hbWUiOiJ4bGVhcm4ifQ.75rPfxqIagzWtPemfX0NGTPoxqRhBJUC0PTp-YSdgGU"
     }
-    patterns = ''
     # if sample_dataset_path is not None:
     #     f = zipfile.ZipFile(sample_dataset_path,'r')
     #     for file in f.namelist():
@@ -49,7 +49,13 @@ def upload_algorithm(server_url, filename, algorithm_name, description, requirem
         'filename': real_name,
         # 'requirements': requirements,
         'entry_name': entrance,
-        'train_input_pattern':patterns,
+        'hyperparameter_config': hyperparameter_config,
+        'train_input_pattern':train_input_pattern,
+        'train_output_pattern':'{}',
+        'model_input_pattern': model_input_pattern,
+        'model_output_pattern': '{}',
+        'learning': learning,
+        'available': 1,
         'user': 'USER44c2f08711e88d4934e12dd07c07',
         'username': 'xlearn'
         # 'mirror': mirror,
@@ -215,20 +221,21 @@ def upload_model(server_url, filename, model_name, output_data_pattern, input_da
     print("Response:", requests.post(server_url + '/model/upload_finish', data=data, headers=headers).text)
 
 # upload_dataset(server_url = "http://192.168.10.22:30800/api/engine", \
-#                filename = "/Users/sherry/Desktop/xlearn_data/resnet_data/bucket_test.zip", \
-#                dataset_name='满斗分类测试集', \
-#                description='满斗测试集')
+#                filename = "/Users/sherry/Downloads/guangzhou_all/test09/201709.zip", \
+#                dataset_name='广州2017.09', \
+#                description='广州2017年9月雷达外推数据')
+#
+upload_algorithm(server_url = "http://192.168.10.22:30800/api/engine", \
+                 filename = "/Users/sherry/GitHub/Xlearn-Algorithms/PredRNN++.zip", \
+                 algorithm_name="PredRNN++(test)", \
+                 description="PredRNN++ by Yunbo Wang", \
+                 entrance='predrnnpp_train_weather.train',
+                 model_input_pattern='predrnnpp')
 
-# upload_algorithm(server_url = "http://192.168.10.22:30800/api/engine", \
-#                  filename = "/Users/sherry/GitHub/Xlearn-Algorithms/ResNet.zip", \
-#                  algorithm_name="ResNet-Latest", \
-#                  description="ResNet", \
-#                  entrance='')
-
-upload_model(server_url = "http://192.168.111.25:30800/api/engine", \
-            filename = "/Users/sherry/Desktop/grease_cla_2500.pkl", \
-            model_name='黄油枪分类模型(新)', \
-            output_data_pattern='', \
-            input_data_patern='resnet',
-            algorithm_id='ALGOfd938eeeb21711e9aecf0a580af4',
-            description='黄油枪分类模型')
+# upload_model(server_url = "http://192.168.111.25:30800/api/engine", \
+#             filename = "/Users/sherry/Desktop/grease_cla_2500.pkl", \
+#             model_name='黄油枪分类模型(新)', \
+#             output_data_pattern='', \
+#             input_data_patern='resnet',
+#             algorithm_id='ALGOfd938eeeb21711e9aecf0a580af4',
+#             description='黄油枪分类模型')
