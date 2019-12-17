@@ -236,21 +236,20 @@ def upload_model(server_url, filename, model_name, output_data_pattern, input_da
     }
     print("Response:", requests.post(server_url + '/model/upload_finish', data=data, headers=headers).text)
 
-# upload_dataset(server_url = "http://192.168.10.22:30800/api/engine", \
-#                data_type='video',\
-#                filename = "/Users/sherry/GitHub/Xlearn-Algorithms/Unet_Severe_Weather_Forecast/3km/segmentation/3km_train.zip", \
-#                dataset_name='3公里强天气训练', \
-#                description='3公里强天气训练数据')
+upload_dataset(server_url = "http://10.20.90.24:30800/api/engine", \
+               data_type='video',\
+               filename = "/Users/sherry/Desktop/guangzhou_all/201710.zip", \
+               dataset_name='2017年10月', \
+               description='2017年10月雷达外推数据')
 
-upload_algorithm(server_url = "http://192.168.10.22:30800/api/engine", \
-                 filename = "/Users/sherry/GitHub/Xlearn-Algorithms/UNet.zip", \
-                 algorithm_name="UNet", \
-                 description="Unet severe weather recognition", \
-                 entrance='src.segmentation.train.train',
-                 train_input_pattern = '{"data_type": "video", "organization": "videoBinFolder4Segmentation", "algos": "unet", "organization_parameter_width": null, "organization_parameter_height": null, "organization_parameter_channel": null, "organization_parameter_preprocess_resize_need": true, "organization_parameter_preprocess_resize_size": null, "organization_parameter_preprocess_crop_need": null, "organization_parameter_preprocess_shuffle_need": true, "organization_parameter_preprocess_normalization_need": true, "organization_parameter_preprocess_normalization_mean": null, "organization_parameter_preprocess_normalization_std": null, "semantic": "00"}',
-                 model_input_pattern='unet',
-                 hyperparameter_config='[{"name": "class_num", "type": "int", "default": 1, "alias":"class number","scope":"<1,1000>", "description":"类别数目","suggest":1},{"name": "batch_size", "type": "int", "default": 1, "alias":"batch size","scope":"<1,1>", "description":"批(Batch)的大小","suggest":1}, {"name": "lr", "type": "float", "default": 5e-5, "alias":"learning rate", "scope":"<5e-5,1.0>", "description":"学习率大小","suggest":1}, {"name": "max_iter", "type": "int", "default": 1000, "alias":"max iteration", "scope":"<100,500000>", "description":"总迭代次数","suggest":1}, {"name": "momentum", "type": "float", "default": 0.9, "scope":"<0.5,0.999>", "description":"优化器冲量","suggest":0}, {"name": "weight_decay", "type": "float", "default": 5e-4, "alias":"weight decay", "scope":"<1e-4,1e-3>", "description":"优化器权重衰减","suggest":0},{"name": "gamma", "type": "float", "default": 0.001, "scope":"<0.0005,0.002>","description":"学习率衰减公式系数","suggest":0}, {"name": "power", "type": "float", "default": 0.75, "scope":"<0.5,1.0>", "description":"学习率衰减公式次数","suggest":0}, {"name": "dataset1", "type": "radio", "alias":"训练数据集"}, {"name": "dataset2", "type": "radio", "alias":"验证数据集"}]'
-                 )
+upload_algorithm(server_url = "http://10.20.90.24:30800/api/engine", \
+                 filename = "/Users/sherry/GitHub/Xlearn-Algorithms/PredRNN.zip", \
+                 algorithm_name="PredRNN", \
+                 description="PredRNN视频预测算法", \
+                 entrance='predrnn_train_weather.train',
+                 train_input_pattern='{"data_type": "video", "organization": "videoFolder4Prediction", "algos": "predrnn", "organization_parameter_width": [224, 224], "organization_parameter_height": [224, 224], "organization_parameter_channel": 3, "organization_parameter_preprocess_resize_need": true, "organization_parameter_preprocess_resize_size": 224, "organization_parameter_preprocess_crop_need": 256, "organization_parameter_preprocess_shuffle_need": true, "organization_parameter_preprocess_normalization_need": true, "organization_parameter_preprocess_normalization_mean": [0.5, 0.5, 0.5], "organization_parameter_preprocess_normalization_std": [0.5, 0.5, 0.5], "semantic": "00"}',
+                 model_input_pattern='predrnn',
+                 hyperparameter_config='[{"name": "patch_size", "type": "int", "default": 4, "alias":"patch size","scope":"<1,16>", "description":"片(Patch)的大小","suggest":1}, {"name": "lr", "type": "float", "default": 0.001, "alias":"learning rate", "scope":"<1e-4,1.0>", "description":"学习率大小","suggest":1}, {"name": "batch_size", "type": "int", "default": 1, "alias":"batch size","scope":"<1,64>", "description":"批(Batch)的大小","suggest":1},{"name": "max_iterations", "type": "int", "default": 80, "alias":"max iteration", "scope":"<80,8000>", "description":"总迭代次数","suggest":1}, {"name": "dataset1", "type": "radio", "alias":"训练数据集"}, {"name": "dataset2", "type": "radio", "alias":"验证数据集"}]')
 
 # upload_model(server_url = "http://192.168.111.25:30800/api/engine", \
 #             filename = "/Users/sherry/Desktop/grease_cla_2500.pkl", \
